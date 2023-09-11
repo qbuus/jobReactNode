@@ -8,6 +8,8 @@ import cors from "cors";
 import corsOptions from "./corsConfig/Options.js";
 import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
+import dbConnection from "./db/dbConnection.js";
+import mongoose from "mongoose";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +17,9 @@ const __dirname = path.dirname(__filename);
 const SERVER_PORT = process.env.PORT || 8010;
 
 const app = express();
+
+// db
+dbConnection();
 
 // middleware
 app.use(cors(corsOptions));
@@ -48,6 +53,13 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: `${errorMsg}` });
 });
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server is running on port: ${SERVER_PORT}`);
+mongoose.connection.once("open", () => {
+  console.log("Connected to DB");
+  app.listen(SERVER_PORT, () => {
+    console.log(`Server is running on port: ${SERVER_PORT}`);
+  });
+});
+
+mongoose.connection.on("error", (error) => {
+  console.log(`${error}`);
 });
