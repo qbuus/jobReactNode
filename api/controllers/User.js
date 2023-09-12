@@ -165,7 +165,7 @@ export const login = async (req, res) => {
     { expiresIn: "7d" }
   );
 
-  res.cookie("jwt", refreshToken, {
+  res.cookie("token", refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: "None",
@@ -176,5 +176,44 @@ export const login = async (req, res) => {
 };
 
 export const changePassword = async (req, res) => {
-  const user = await userModel.findById();
+  const { token } = req.cookies;
+
+  if (!token)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  jwt.verify(token, secret, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden" });
+
+    const user = await userModel.findById(decoded.id);
+
+    if (!user) {
+      return res
+        .json(401)
+        .json({ message: "User Unauthorized" });
+    }
+
+    if (!req.body.oldPassword || !req.body.password) {
+      return res
+        .status(400)
+        .json({ message: "Fill all required fields" });
+    }
+
+    const passwordIsCorrect = await bcrypt.compare(
+      req.body.oldPassword,
+      user.password
+    );
+
+    if (!passwordIsCorrect) {
+      return res
+        .status(401)
+        .json({ message: "Password is not correct" });
+    }
+
+    user.password = req.body.password;
+
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  });
 };
