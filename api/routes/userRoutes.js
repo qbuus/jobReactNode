@@ -17,5 +17,6 @@ router.post(
   passwordChangeLimiter,
   userRouter.changePassword
 );
+router.get("/refreshToken", userRouter.refreshToken);
 
 export default router;

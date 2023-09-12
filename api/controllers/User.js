@@ -217,3 +217,38 @@ export const changePassword = async (req, res) => {
     res.json({ message: "Password changed successfully" });
   });
 };
+
+export const refreshToken = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  const tokenToRefresh = token;
+
+  jwt.verify(tokenToRefresh, secret, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden" });
+
+    const user = await userModel.findById(decoded.id).exec();
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found" });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        UserInfo: {
+          username: foundUser.username,
+          role: foundUser.role,
+          id: foundUser._id,
+        },
+      },
+      secret,
+      { expiresIn: "1d" }
+    );
+    res.json({ accessToken });
+  });
+};
