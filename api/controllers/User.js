@@ -2,6 +2,9 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import userModel from "../models/User.js";
 import bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
+
+const secret = process.env.TOKEN_SECRET;
 
 export const createUser = async (req, res, next) => {
   const {
@@ -108,4 +111,70 @@ export const getAllUser = async (req, res, next) => {
     pages: Math.ceil(count / pageSize),
     count,
   });
+};
+
+export const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ message: "All these field are required" });
+  }
+
+  const foundUser = await userModel
+    .findOne({
+      username: username,
+    })
+    .exec();
+
+  if (!foundUser) {
+    return res
+      .status(404)
+      .json({ message: "User does not exist" });
+  }
+
+  const PassMatch = await bcrypt.compare(
+    password,
+    foundUser.password
+  );
+
+  if (!PassMatch) {
+    return res
+      .status(401)
+      .json({ message: "Password is not correct" });
+  }
+
+  const accessToken = jwt.sign(
+    {
+      UserInfo: {
+        username: foundUser.username,
+        role: foundUser.role,
+        id: foundUser._id,
+      },
+    },
+    secret,
+    {
+      expiresIn: "1d",
+    }
+  );
+
+  const refreshToken = jwt.sign(
+    { username: foundUser.username },
+    secret,
+    { expiresIn: "7d" }
+  );
+
+  res.cookie("jwt", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.json({ accessToken });
+};
+
+export const changePassword = async (req, res) => {
+  const user = await userModel.findById();
 };
