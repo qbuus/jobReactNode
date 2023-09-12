@@ -42,7 +42,7 @@ export const createUser = async (req, res, next) => {
 
   if (username.length < 3) {
     return res.status(400).json({
-      message: "Password must be at least 4 characters long",
+      message: "Password must be at least 3 characters long",
     });
   }
 
@@ -177,6 +177,8 @@ export const login = async (req, res) => {
 
 export const changePassword = async (req, res) => {
   const { token } = req.cookies;
+  const passwordRegex =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/;
 
   if (!token)
     return res.status(401).json({ message: "Unauthorized" });
@@ -208,6 +210,14 @@ export const changePassword = async (req, res) => {
       return res
         .status(401)
         .json({ message: "Password is not correct" });
+    }
+
+    const checkPassword = passwordRegex.test(req.body.password);
+    if (!checkPassword) {
+      return res.status(422).json({
+        message:
+          "Password must have at least one uppercase and lowercase letter. Must have at least one digit, one special character and be at least 6 characters long",
+      });
     }
 
     user.password = req.body.password;
@@ -266,4 +276,49 @@ export const logout = async (req, res) => {
     secure: true,
   });
   res.json({ message: "Logged out" });
+};
+
+export const updateUserBesidePassword = async (req, res) => {
+  const { token } = req.cookies;
+  const emailRegexp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  if (!token)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  jwt.verify(token, secret, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden" });
+
+    const user = await userModel.findById(decoded.id);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found" });
+    }
+
+    const emailCheck = emailRegexp.test(req.body.email);
+    if (!emailCheck) {
+      return res
+        .status(422)
+        .json({ message: "email is not valid" });
+    }
+
+    if (username.length < 3) {
+      return res.status(400).json({
+        message: "Password must be at least 3 characters long",
+      });
+    }
+
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastNameName;
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.role = req.body.role;
+
+    await user.save();
+
+    res.json({ message: "Data changed successfully" });
+  });
 };

@@ -19,5 +19,11 @@ router.post(
 );
 router.get("/refreshToken", userRouter.refreshToken);
 router.post("/logout", userRouter.logout);
+router.post(
+  "/update",
+  verifyJwt,
+  passwordChangeLimiter,
+  userRouter.updateUserBesidePassword
+);
 
 export default router;
