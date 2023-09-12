@@ -83,3 +83,29 @@ export const createUser = async (req, res, next) => {
       .json({ message: "Invalid user data received" });
   }
 };
+
+export const getAllUser = async (req, res, next) => {
+  const pageSize = 10;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await userModel
+    .find({})
+    .estimatedDocumentCount();
+
+  const users = await userModel
+    .find()
+    .sort({ createdAt: -1 })
+    .select("-password")
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+
+  if (!users?.length) {
+    return res.status(404).json({ message: "No users found" });
+  }
+
+  res.json({
+    users,
+    page,
+    pages: Math.ceil(count / pageSize),
+    count,
+  });
+};
