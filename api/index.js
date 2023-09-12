@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
 import dbConnection from "./db/dbConnection.js";
 import mongoose from "mongoose";
+import errorHandler from "./middleware/errorHandler.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,12 +30,15 @@ app.use(cookieParser());
 
 // routes
 app.use("/", rootRouter);
+app.use("/users", userRoutes);
 
 // not found api
-app.use("*", (req, res) => {
+app.use("*", (req, res, next) => {
   res.status(404);
   if (req.accepts("html")) {
-    res.sendFile(path.join(__dirname, "views", "notfound.html"));
+    res.sendFile(
+      path.join(__dirname, "views", "notfound.html")
+    );
   } else if (req.accepts("json")) {
     res.json({ message: "404 Not Found" });
   } else {
@@ -42,16 +47,7 @@ app.use("*", (req, res) => {
 });
 
 // server error
-app.use((error, req, res, next) => {
-  let errorMsg = "An Error Occured";
-  let status = 500;
-
-  if (isHttpError(error)) {
-    errorMsg = error.message;
-    status = error.status;
-  }
-  res.status(status).json({ message: `${errorMsg}` });
-});
+app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to DB");
