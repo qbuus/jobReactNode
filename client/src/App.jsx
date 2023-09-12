@@ -1,7 +1,9 @@
+import ThemeChooser from "./components/ThemeChooser";
+
 function App() {
   return (
     <>
-      <button>Tailwind test</button>
+      <ThemeChooser />
     </>
   );
 }
