@@ -18,5 +18,6 @@ router.post(
   userRouter.changePassword
 );
 router.get("/refreshToken", userRouter.refreshToken);
+router.post("/logout", userRouter.logout);
 
 export default router;

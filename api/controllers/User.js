@@ -252,3 +252,18 @@ export const refreshToken = async (req, res) => {
     res.json({ accessToken });
   });
 };
+
+export const logout = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.sendStatus(204);
+  }
+
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
+  res.json({ message: "Logged out" });
+};
