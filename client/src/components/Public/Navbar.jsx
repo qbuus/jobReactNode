@@ -6,7 +6,7 @@ import ThemeChooser from "../Theme/ThemeChooser";
 
 const HeaderNav = () => {
   return (
-    <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-md">
+    <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
       <nav className="navbar w-full">
         <div className="flex gap-3 navbar-start">
           <div className="dropdown">
@@ -16,7 +16,7 @@ const HeaderNav = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -49,19 +49,25 @@ const HeaderNav = () => {
               </div>
             </ul>
           </div>
-          <div className="hidden sm:block ">Linkcoś1</div>
-          <div className="hidden sm:block">Linkcoś2</div>
+          <div className="hidden sm:block ">
+            <Link className="btn btn-ghost drawer-button font-normal normal-case">
+              11
+            </Link>
+          </div>
+          <div className="hidden sm:block">
+            <Link className="btn btn-ghost drawer-button font-normal normal-case">
+              22
+            </Link>
+          </div>
         </div>
         <div className="navbar-center">
           <button className="btn btn-ghost">
-            <Link>
+            <Link to="/main">
               <div className="flex items-center gap-2">
                 <GiNetworkBars className="h-6 w-6 md:h-8 md:w-8" />
                 <div className="text-lg md:text-2xl">
                   <span className="lowercase">job</span>
-                  <span className="uppercase text-base">
-                    Portal
-                  </span>
+                  <span className="uppercase">Portal</span>
                 </div>
               </div>
             </Link>

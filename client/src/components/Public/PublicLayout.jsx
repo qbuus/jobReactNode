@@ -5,15 +5,17 @@ import HeaderNav from "./Navbar";
 const PublicLayout = () => {
   return (
     <>
-      <header>
-        <HeaderNav />
-      </header>
-      <main>
-        <Outlet />
-      </main>
-      <footer>
-        <Footer />
-      </footer>
+      <div className="flex flex-col justify-between min-h-screen">
+        <header className="grow-0">
+          <HeaderNav />
+        </header>
+        <main className="grow py-1">
+          <Outlet />
+        </main>
+        <footer className="grow-0">
+          <Footer />
+        </footer>
+      </div>
     </>
   );
 };
