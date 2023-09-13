@@ -8,11 +8,11 @@ const HeaderNav = () => {
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
       <nav className="navbar w-full">
-        <div className="flex gap-3 navbar-start">
+        <div className="flex gap-3 md:gap-5 navbar-start">
           <div className="dropdown">
             <label
               tabIndex={0}
-              className="btn btn-ghost btn-circle"
+              className="btn btn-sm md:btn-md btn-ghost btn-circle"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -34,13 +34,13 @@ const HeaderNav = () => {
                 className="grid grid-cols-1 gap-4 p-3"
                 tabIndex={0}
               >
-                <li className="sm:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                <li className="md:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>coślink1</Link>
                 </li>
-                <li className="sm:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                <li className="md:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>coślink2</Link>
                 </li>
-                <li className="sm:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                <li className="md:hidden text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>coślink3</Link>
                 </li>
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
@@ -49,36 +49,36 @@ const HeaderNav = () => {
               </div>
             </ul>
           </div>
-          <div className="hidden sm:block ">
+          <div className="hidden md:block ">
             <Link className="btn btn-ghost drawer-button font-normal normal-case">
               11
             </Link>
           </div>
-          <div className="hidden sm:block">
+          <div className="hidden md:block">
             <Link className="btn btn-ghost drawer-button font-normal normal-case">
               22
             </Link>
           </div>
         </div>
         <div className="navbar-center">
-          <button className="btn btn-ghost">
-            <Link to="/main">
-              <div className="flex items-center gap-2">
-                <GiNetworkBars className="h-6 w-6 md:h-8 md:w-8" />
-                <div className="text-lg md:text-2xl">
+          <Link to="/">
+            <button className="btn btn-sm md:btn-md btn-ghost md:inline">
+              <div className="flex items-center gap-0 md:gap-3">
+                <GiNetworkBars className="h-8 w-6 md:h-8 md:w-8" />
+                <div className="text-lg md:text-2xl hidden md:inline">
                   <span className="lowercase">job</span>
                   <span className="uppercase">Portal</span>
                 </div>
               </div>
-            </Link>
-          </button>
+            </button>
+          </Link>
         </div>
         <div className="navbar-end">
-          <div className="flex items-center gap-1 justify-center">
+          <div className="flex items-center gap-2 md:gap-5 justify-center">
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
-                className="btn normal-case btn-ghost"
+                className="btn btn-sm md:btn-md normal-case btn-ghost"
               >
                 <svg
                   width="20"
@@ -86,27 +86,39 @@ const HeaderNav = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="h-5 w-5 stroke-current sm:hidden"
+                  className="h-5 w-5 stroke-current md:hidden"
                 >
                   <path
                     strokeLinecap="round"
                     d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
                   ></path>
                 </svg>
-                <span className="hidden font-normal sm:inline">
+                <span className="hidden font-normal md:inline">
                   Theme
                 </span>
-                <ul className="dropdown-content bg-base-200 text-base-content rounded-box top-px max-h-96 w-56 overflow-y-auto shadow mt-16">
-                  <div className="grid grid-cols-1 gap-4 p-3">
+                <ul className="dropdown-content bg-base-200 text-base-content rounded-box top-px max-h-96 w-40 sm:w-56 overflow-y-auto shadow mt-16">
+                  <div className="grid grid-cols-1 gap-4 p-5">
                     <ThemeChooser />
                   </div>
                 </ul>
               </div>
             </div>
             <div className="dropdown dropdown-end">
+              <Link to="/login">
+                <div
+                  tabIndex={0}
+                  className="btn btn-sm md:btn-md normal-case bg-secondary text-base-100 hover:text-success"
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <span className="font-bold">Sign in</span>
+                  </div>
+                </div>
+              </Link>
+            </div>
+            <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
-                className="btn btn-ghost btn-cirlce flex items-center justify-center"
+                className="btn btn-sm md:btn-md btn-ghost btn-cirlce flex items-center justify-center"
               >
                 <div className="rounded-full">
                   <CiUser className="h-6 w-6" />

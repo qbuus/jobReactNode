@@ -4,11 +4,11 @@ import { GiNetworkBars } from "react-icons/gi";
 
 const Footer = () => {
   return (
-    <div className="footer z-30 p-10 bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content">
+    <div className="footer z-30 px-10 py-2 bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content">
       <aside>
         <div className="flex flex-col">
           <div className="flex flex-row gap-2 items-center">
-            <GiNetworkBars className="h-12 w-12 sm:w-14 sm:h-14" />
+            <GiNetworkBars className="h-10 w-10 sm:w-12 sm:h-12" />
             <div className="text-lg sm:text-xl font-normal">
               <span className="lowercase">job</span>
               <span className="uppercase">Portal</span>

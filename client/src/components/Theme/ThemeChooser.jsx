@@ -1,14 +1,14 @@
 import UseTheme from "../../hooks/useTheme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import themeData from "../../config/ThemeData.js";
 
 const ThemeChooser = () => {
   const [theme, setTheme] = useState(
-    localStorage.getItem("portalTheme") ?? "dark"
+    localStorage.getItem("portalTheme") ?? "light"
   );
   const [active, setActive] = useState(null);
 
-  UseTheme(theme);
+  UseTheme(theme, setTheme);
 
   return (
     <>

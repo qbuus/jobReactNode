@@ -6,13 +6,13 @@ const PublicLayout = () => {
   return (
     <>
       <div className="flex flex-col justify-between min-h-screen">
-        <header className="grow-0">
+        <header>
           <HeaderNav />
         </header>
-        <main className="grow py-1">
+        <main className="grow flex bg-base-300">
           <Outlet />
         </main>
-        <footer className="grow-0">
+        <footer>
           <Footer />
         </footer>
       </div>

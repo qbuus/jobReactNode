@@ -10,7 +10,7 @@ const UserModel = new mongoose.Schema(
     role: {
       type: String,
       default: "Seeker",
-      enum: ["Seeker", "Poster", "Admin"],
+      enum: ["Seeker", "Recruiter", "Admin"],
     },
     active: { type: Boolean, default: false },
   },

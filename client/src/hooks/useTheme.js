@@ -1,10 +1,15 @@
 import { useEffect } from "react";
 
-const UseTheme = (theme) => {
+const UseTheme = (theme, setTheme) => {
   useEffect(() => {
-    localStorage.setItem("portalTheme", theme);
-    const localTheme = localStorage.getItem("portalTheme");
-    document.body.dataset.theme = localTheme;
+    const savedTheme =
+      window.localStorage.getItem("portalTheme");
+    savedTheme && setTheme(savedTheme);
+  }, []);
+
+  useEffect(() => {
+    document.body.dataset.theme = theme;
+    window.localStorage.setItem("portalTheme", theme);
   }, [theme]);
 };
 
