@@ -5,8 +5,6 @@ const UseTheme = (theme) => {
     localStorage.setItem("portalTheme", theme);
     const localTheme = localStorage.getItem("portalTheme");
     document.body.dataset.theme = localTheme;
-
-    console.log(theme);
   }, [theme]);
 };
 

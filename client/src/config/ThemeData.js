@@ -1,9 +1,6 @@
 const themeData = [
   { theme: "light" },
   { theme: "dark" },
-  { theme: "dracula" },
-  { theme: "light" },
-  { theme: "dark" },
   { theme: "cupcake" },
   { theme: "bumblebee" },
   { theme: "emerald" },
