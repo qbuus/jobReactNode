@@ -11,7 +11,7 @@ import {
 const RegisterNewUser = () => {
   return (
     <div className="grow flex flex-col md:flex-row">
-      {/* Login */}
+      {/*Register */}
       <div className="flex flex-col gap-4 md:grow grow-0 px-10 py-6">
         <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-normal">
@@ -26,7 +26,7 @@ const RegisterNewUser = () => {
         </div>
         <div>
           <div className="flex flex-col overflow-hidden">
-            <div className="bg-base-100 rounded-md shadow-md p-4 w-full m-auto">
+            <div className="w-full p-4 m-auto bg-base-100 rounded-md shadow-md">
               <RegisterForm />
             </div>
           </div>

@@ -23,7 +23,7 @@ const Login = () => {
             Log in to your account
           </h2>
         </div>
-        <div className="flex flex-col gap-1 text-md lg:text-lg">
+        <div className="flex flex-col gap-1 text-md lg:text-lg ">
           <p className="font-bold">Do not have an account ?</p>
           <b className="hover:cursor-pointer text-accent max-w-max text-center btn-ghost rounded-lg">
             <Link to="/register">Sign up</Link>

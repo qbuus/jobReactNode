@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.post("/create", loginLimiter, userRouter.createUser);
+router.post("/create", userRouter.createUser);
 router.get("", userRouter.getAllUser);
 router.post("/login", loginLimiter, userRouter.login);
 router.post(
@@ -18,7 +18,7 @@ router.post(
   userRouter.changePassword
 );
 router.get("/refreshToken", userRouter.refreshToken);
-router.post("/logout", userRouter.logout);
+router.post("/logout", verifyJwt, userRouter.logout);
 router.post(
   "/update",
   verifyJwt,

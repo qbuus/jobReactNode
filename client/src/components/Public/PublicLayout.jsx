@@ -5,11 +5,11 @@ import HeaderNav from "./Navbar";
 const PublicLayout = () => {
   return (
     <>
-      <div className="flex flex-col justify-between min-h-screen">
-        <header>
+      <div className="flex flex-col min-h-screen">
+        <header className="sticky top-0">
           <HeaderNav />
         </header>
-        <main className="grow flex bg-base-300">
+        <main className="grow flex bg-base-300 min-h-[80vh]">
           <Outlet />
         </main>
         <footer>

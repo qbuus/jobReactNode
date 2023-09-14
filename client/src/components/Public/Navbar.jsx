@@ -6,7 +6,7 @@ import ThemeChooser from "../Theme/ThemeChooser";
 
 const HeaderNav = () => {
   return (
-    <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
+    <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
       <nav className="navbar w-full">
         <div className="flex gap-3 md:gap-5 navbar-start">
           <div className="dropdown">

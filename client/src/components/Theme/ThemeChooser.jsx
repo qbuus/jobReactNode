@@ -1,5 +1,5 @@
 import UseTheme from "../../hooks/useTheme";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import themeData from "../../config/ThemeData.js";
 
 const ThemeChooser = () => {

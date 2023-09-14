@@ -20,7 +20,7 @@ export const createUser = async (req, res, next) => {
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const passwordRegex =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/;
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
   if (
     !firstName ||
@@ -32,6 +32,14 @@ export const createUser = async (req, res, next) => {
     return res
       .status(400)
       .json({ message: "All these field are required" });
+  }
+
+  const isUserDuplicate = await userModel.findOne({ email });
+
+  if (isUserDuplicate) {
+    return res
+      .status(409)
+      .json({ message: "User already exists" });
   }
 
   if (!emailRegexp.test(email)) {
@@ -49,21 +57,13 @@ export const createUser = async (req, res, next) => {
   if (!passwordRegex.test(password)) {
     return res.status(422).json({
       message:
-        "Password must have at least one uppercase and lowercase letter. Must have at least one digit, one special character and be at least 6 characters long",
+        "Password must have at least one uppercase and lowercase letter. Must have at least one digit and be at least 6 characters long",
     });
-  }
-
-  const isUserDuplicate = await userModel.findOne({ username });
-
-  if (isUserDuplicate) {
-    return res
-      .status(409)
-      .json({ message: "User already exists" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  if (((!role === "") | "Seeker" | "Poster", "Admin")) {
+  if ((!role === "") | "Seeker" | "Poster" | "Admin") {
     return res.status(422).json({ meesage: "Role is invalid" });
   }
 

@@ -5,7 +5,7 @@ const UseTheme = (theme, setTheme) => {
     const savedTheme =
       window.localStorage.getItem("portalTheme");
     savedTheme && setTheme(savedTheme);
-  }, []);
+  }, [setTheme]);
 
   useEffect(() => {
     document.body.dataset.theme = theme;
