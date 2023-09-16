@@ -12,10 +12,16 @@ import {
   BiLogoPython,
   BiLogoPostgresql,
 } from "react-icons/bi";
+import { useLoginMutation } from "../../Redux/Auth/authApiSlice";
+import Loader from "../FeatureComponents/Loader";
 
 const Login = () => {
+  const { isLoading } = useLoginMutation();
+
   return (
-    <div className="grow flex flex-col-reverse md:flex-row">
+    <div className="relative grow flex flex-col-reverse md:flex-row">
+      {/*Loader*/}
+      {isLoading ? <Loader /> : null}
       {/* Login */}
       <div className="flex flex-col gap-8 md:grow-0 grow px-10 py-6">
         <div className="flex flex-col gap-8">

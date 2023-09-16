@@ -12,7 +12,7 @@ const PublicLayout = () => {
         <main className="grow flex bg-base-300 min-h-[85vh]">
           <Outlet />
         </main>
-        <footer>
+        <footer className="sticky">
           <Footer />
         </footer>
       </div>

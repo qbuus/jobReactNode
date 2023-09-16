@@ -9,8 +9,8 @@ const HeaderNav = () => {
 
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
-      <nav className="navbar w-full">
-        <div className="flex gap-3 md:gap-5 navbar-start">
+      <nav className="sm:navbar w-full flex justify-between items-center">
+        <div className="flex gap-3 md:gap-5 sm:navbar-start">
           <div className="dropdown">
             <label
               tabIndex={0}
@@ -51,7 +51,20 @@ const HeaderNav = () => {
               </div>
             </ul>
           </div>
-          <div className="hidden md:block ">
+          <div className="sm:hidden">
+            <Link to="/">
+              <button className="btn btn-sm md:btn-md btn-ghost md:inline">
+                <div className="flex items-center gap-0 md:gap-3">
+                  <GiNetworkBars className="h-6 w-6 md:h-8 md:w-8 items-center" />
+                  <div className="text-lg md:text-2xl hidden md:inline">
+                    <span className="lowercase">job</span>
+                    <span className="uppercase">Portal</span>
+                  </div>
+                </div>
+              </button>
+            </Link>
+          </div>
+          <div className="hidden md:block">
             <Link className="btn btn-ghost drawer-button font-normal normal-case">
               11
             </Link>
@@ -62,11 +75,11 @@ const HeaderNav = () => {
             </Link>
           </div>
         </div>
-        <div className="navbar-center">
+        <div className="sm:navbar-center hidden sm:block">
           <Link to="/">
             <button className="btn btn-sm md:btn-md btn-ghost md:inline">
               <div className="flex items-center gap-0 md:gap-3">
-                <GiNetworkBars className="h-8 w-6 md:h-8 md:w-8" />
+                <GiNetworkBars className="h-6 w-6 md:h-8 md:w-8 items-center" />
                 <div className="text-lg md:text-2xl hidden md:inline">
                   <span className="lowercase">job</span>
                   <span className="uppercase">Portal</span>
@@ -75,9 +88,9 @@ const HeaderNav = () => {
             </button>
           </Link>
         </div>
-        <div className="navbar-end">
-          <div className="flex items-center gap-2 md:gap-5 justify-center">
-            <div className="dropdown dropdown-end">
+        <div className="sm:navbar-end">
+          <div className="flex items-center gap-3 md:gap-5 justify-center">
+            <div className="dropdown dropdown-content">
               <div
                 tabIndex={0}
                 className="btn btn-sm md:btn-md normal-case btn-ghost"
@@ -88,17 +101,14 @@ const HeaderNav = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="h-5 w-5 stroke-current md:hidden"
+                  className="h-5 w-5 stroke-current md:h-7 md:w-7"
                 >
                   <path
                     strokeLinecap="round"
                     d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
                   ></path>
                 </svg>
-                <span className="hidden font-normal md:inline">
-                  Theme
-                </span>
-                <ul className="dropdown-content bg-base-200 text-base-content rounded-box top-px max-h-96 w-40 sm:w-56 overflow-y-auto shadow mt-16">
+                <ul className="dropdown-content bg-base-200 text-base-content rounded-box top-px max-h-96 w-56 md:w-72 overflow-y-auto shadow mt-16">
                   <div className="grid grid-cols-1 gap-4 p-5">
                     <ThemeChooser />
                   </div>

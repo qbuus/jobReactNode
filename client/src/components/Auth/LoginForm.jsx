@@ -1,34 +1,34 @@
 import React from "react";
-import useAuth from "../../hooks/useAuth.js";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  currentToken,
-  setUserData,
-} from "../../Redux/Auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../Redux/Auth/authSlice";
 import useDocumentTitle from "../../hooks/useDocumentTitle.js";
-import axios from "axios";
+import { useLoginMutation } from "../../Redux/Auth/authApiSlice.js";
 
 const LoginForm = () => {
   useDocumentTitle("Login");
+  const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const [login] = useLoginMutation();
+
   const dispatch = useDispatch();
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:3500/users/login", {
-        username: username,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response.data);
-        dispatch(setUserData(response.data));
-      })
-      .catch((err) => console.log(err.response.data));
+    try {
+      const data = await login({
+        username,
+        password,
+      }).unwrap();
+      dispatch(setUserData(data.accessToken));
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const setUserPassword = (e) => setPassword(e.target.value);

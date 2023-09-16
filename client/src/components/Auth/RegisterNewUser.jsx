@@ -1,4 +1,3 @@
-import React from "react";
 import RegisterForm from "./RegiserForm";
 import { Link } from "react-router-dom";
 import {
@@ -7,10 +6,17 @@ import {
   BiStar,
   BiSearch,
 } from "react-icons/bi";
+import { useLoginMutation } from "../../Redux/Auth/authApiSlice";
+import Loader from "../FeatureComponents/Loader";
 
 const RegisterNewUser = () => {
+  const { isLoading } = useLoginMutation();
+
   return (
-    <div className="grow flex flex-col md:flex-row">
+    <div className="relative grow flex flex-col md:flex-row">
+      {/* Loader */}
+      {isLoading ? <Loader /> : null}
+
       {/*Register */}
       <div className="flex flex-col gap-4 md:grow grow-0 px-10 py-6">
         <div className="flex flex-col gap-4">
@@ -21,7 +27,9 @@ const RegisterNewUser = () => {
         <div className="flex flex-col gap-1 text-md lg:text-lg">
           <p className="font-bold">Already have an account ?</p>
           <b className="hover:cursor-pointer text-accent max-w-max btn-ghost rounded-lg">
-            <Link to="/login">Log in</Link>
+            <Link to="/login">
+              <button>login</button>
+            </Link>
           </b>
         </div>
         <div>

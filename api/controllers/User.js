@@ -141,7 +141,7 @@ export const login = async (req, res) => {
 
   if (!PassMatch) {
     return res
-      .status(401)
+      .status(422)
       .json({ message: "Password is not correct" });
   }
 
@@ -173,7 +173,6 @@ export const login = async (req, res) => {
   });
 
   res.json({ accessToken });
-  res.end();
 };
 
 export const changePassword = async (req, res) => {
@@ -209,7 +208,7 @@ export const changePassword = async (req, res) => {
 
     if (!passwordIsCorrect) {
       return res
-        .status(401)
+        .status(422)
         .json({ message: "Password is not correct" });
     }
 

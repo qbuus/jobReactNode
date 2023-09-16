@@ -1,8 +1,10 @@
 import React from "react";
 import Roles from "../FeatureComponents/Roles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegiserForm = () => {
+  const navigate = useNavigate();
   const [message, setMessage] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -38,6 +40,7 @@ const RegiserForm = () => {
         formData
       );
       setMessage(response.data.message);
+      navigate("/");
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setLoading(false);
@@ -48,7 +51,7 @@ const RegiserForm = () => {
 
   function BackdropLoader() {
     return (
-      <div className="absolute bg-primary bg-opacity-30 z-100 h-full w-full flex items-center justify-center">
+      <div className="fixed bg-primary bg-opacity-30 z-100 h-full w-full flex items-center justify-center">
         <span className="loading loading-spinner text-neutral"></span>
       </div>
     );
