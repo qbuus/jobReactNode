@@ -17,7 +17,7 @@ router.post(
   passwordChangeLimiter,
   userRouter.changePassword
 );
-router.get("/refreshToken", userRouter.refreshToken);
+router.get("/refreshToken", verifyJwt, userRouter.refreshToken);
 router.post("/logout", verifyJwt, userRouter.logout);
 router.post(
   "/update",

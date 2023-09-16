@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import userModel from "../models/User.js";
 import bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -173,6 +173,7 @@ export const login = async (req, res) => {
   });
 
   res.json({ accessToken });
+  res.end();
 };
 
 export const changePassword = async (req, res) => {

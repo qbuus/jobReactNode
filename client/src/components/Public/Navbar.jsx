@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import ThemeChooser from "../Theme/ThemeChooser";
 
 const HeaderNav = () => {
+  const location = useLocation();
+
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
       <nav className="navbar w-full">
@@ -104,13 +106,23 @@ const HeaderNav = () => {
               </div>
             </div>
             <div className="dropdown dropdown-end">
-              <Link to="/login">
+              <Link
+                to={
+                  location.pathname === "/login"
+                    ? "/register"
+                    : "/login"
+                }
+              >
                 <div
                   tabIndex={0}
                   className="btn btn-sm md:btn-md normal-case bg-secondary text-base-100 hover:text-success"
                 >
                   <div className="flex items-center justify-center gap-1">
-                    <span className="font-bold">Sign in</span>
+                    <span className="font-bold">
+                      {location.pathname === "/login"
+                        ? "Sign up"
+                        : "Sign in"}
+                    </span>
                   </div>
                 </div>
               </Link>

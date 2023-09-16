@@ -9,7 +9,7 @@ const PublicLayout = () => {
         <header className="sticky top-0">
           <HeaderNav />
         </header>
-        <main className="grow flex bg-base-300 min-h-[80vh]">
+        <main className="grow flex bg-base-300 min-h-[85vh]">
           <Outlet />
         </main>
         <footer>

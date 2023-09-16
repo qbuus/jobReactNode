@@ -24,9 +24,9 @@ const app = express();
 dbConnection();
 
 // middleware
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 // routes
 app.use("/", rootRouter);
