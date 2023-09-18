@@ -20,11 +20,11 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const data = await login({
+      const { accessToken } = await login({
         username,
         password,
       }).unwrap();
-      dispatch(setUserData(data.accessToken));
+      dispatch(setUserData(accessToken));
       navigate("/");
     } catch (err) {
       console.log(err);

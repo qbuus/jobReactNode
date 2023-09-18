@@ -13,7 +13,22 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
         body: { ...userCredentials },
       }),
     }),
+    refresh: builder.mutation({
+      query: () => ({
+        url: "/users/refreshToken",
+        method: "GET",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setUserData(data.data.accessToken));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApiSlice;
+export const { useLoginMutation, useRefreshMutation } =
+  authApiSlice;

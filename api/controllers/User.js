@@ -6,6 +6,46 @@ import jwt from "jsonwebtoken";
 
 const secret = process.env.TOKEN_SECRET;
 
+export const initialTokenCheck = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    res.sendStatus(204).json({
+      message: "Token has not been found. Please sign in",
+    });
+  }
+
+  const checkToken = token;
+
+  jwt.verify(checkToken, secret, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden" });
+
+    const foundLoggedInUser = await userModel
+      .findOne({
+        username: decoded.username,
+      })
+      .exec();
+
+    if (!foundLoggedInUser) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const alreadyAccessedToken = jwt.sign(
+      {
+        UserInfo: {
+          username: foundLoggedInUser,
+          role: foundLoggedInUser,
+          id: foundLoggedInUser,
+        },
+      },
+      secret,
+      { expiresIn: "1d" }
+    );
+    res.json({ accessToken: alreadyAccessedToken });
+  });
+};
+
 export const createUser = async (req, res, next) => {
   const {
     firstName,
@@ -231,8 +271,7 @@ export const changePassword = async (req, res) => {
 export const refreshToken = async (req, res) => {
   const { token } = req.cookies;
 
-  if (!token)
-    return res.status(401).json({ message: "Unauthorized" });
+  if (!token) return res.sendStatus(204);
 
   const tokenToRefresh = token;
 
@@ -240,7 +279,9 @@ export const refreshToken = async (req, res) => {
     if (err)
       return res.status(403).json({ message: "Forbidden" });
 
-    const user = await userModel.findById(decoded.id).exec();
+    const user = await userModel
+      .findOne({ username: decoded.username })
+      .exec();
 
     if (!user) {
       return res
@@ -251,9 +292,9 @@ export const refreshToken = async (req, res) => {
     const accessToken = jwt.sign(
       {
         UserInfo: {
-          username: foundUser.username,
-          role: foundUser.role,
-          id: foundUser._id,
+          username: user.username,
+          role: user.role,
+          id: user._id,
         },
       },
       secret,

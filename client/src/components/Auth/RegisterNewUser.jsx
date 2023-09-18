@@ -55,7 +55,7 @@ const RegisterNewUser = () => {
                 </h3>
               </div>
               <div className="flex justify-center">
-                <p className="font-normal text-center text-md">
+                <p className="font-normal text-center text-lg">
                   Statistically we have the highest paying
                   offers
                 </p>

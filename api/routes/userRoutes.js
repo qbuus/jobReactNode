@@ -8,6 +8,7 @@ import {
 
 const router = express.Router();
 
+router.get("/initialCheck", userRouter.initialTokenCheck);
 router.post("/create", userRouter.createUser);
 router.get("", userRouter.getAllUser);
 router.post("/login", loginLimiter, userRouter.login);
@@ -17,7 +18,7 @@ router.post(
   passwordChangeLimiter,
   userRouter.changePassword
 );
-router.get("/refreshToken", verifyJwt, userRouter.refreshToken);
+router.get("/refreshToken", userRouter.refreshToken);
 router.post("/logout", verifyJwt, userRouter.logout);
 router.post(
   "/update",

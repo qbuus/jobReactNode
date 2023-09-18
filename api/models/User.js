@@ -13,6 +13,7 @@ const UserModel = new mongoose.Schema(
       enum: ["Seeker", "Recruiter", "Admin"],
     },
     active: { type: Boolean, default: false },
+    isLoggedIn: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
