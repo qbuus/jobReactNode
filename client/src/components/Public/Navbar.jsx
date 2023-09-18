@@ -3,9 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import ThemeChooser from "../Theme/ThemeChooser";
+import useAuth from "../../hooks/useAuth";
 
 const HeaderNav = () => {
   const location = useLocation();
+
+  const auth = useAuth();
 
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
@@ -115,28 +118,30 @@ const HeaderNav = () => {
                 </ul>
               </div>
             </div>
-            <div className="dropdown dropdown-end">
-              <Link
-                to={
-                  location.pathname === "/login"
-                    ? "/register"
-                    : "/login"
-                }
-              >
-                <div
-                  tabIndex={0}
-                  className="btn btn-sm md:btn-md normal-case bg-secondary text-base-100 hover:text-success"
+            {auth.username.length > 3 ? null : (
+              <div className="dropdown dropdown-end">
+                <Link
+                  to={
+                    location.pathname === "/login"
+                      ? "/register"
+                      : "/login"
+                  }
                 >
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="font-bold">
-                      {location.pathname === "/login"
-                        ? "Sign up"
-                        : "Sign in"}
-                    </span>
+                  <div
+                    tabIndex={0}
+                    className="btn btn-sm md:btn-md normal-case bg-secondary text-base-100 hover:text-success"
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      <span className="font-bold">
+                        {location.pathname === "/login"
+                          ? "Sign up"
+                          : "Sign in"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </div>
+                </Link>
+              </div>
+            )}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
@@ -151,20 +156,35 @@ const HeaderNav = () => {
                 tabIndex={0}
               >
                 <div className="grid grid-cols-1 gap-4 p-3">
-                  <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                    <Link>Profile</Link>
-                  </li>
-                  <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                    <Link>
-                      Settings
-                      <span className="badge ml-3 bg-base-100">
-                        New
-                      </span>
-                    </Link>
-                  </li>
-                  <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                    <Link>Sign out</Link>
-                  </li>
+                  {auth.username ? (
+                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                      <Link>Profile</Link>
+                    </li>
+                  ) : null}
+                  {auth.username.length > 3 ? (
+                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                      <Link>
+                        Settings
+                        <span className="badge ml-3 bg-base-100">
+                          New
+                        </span>
+                      </Link>
+                    </li>
+                  ) : null}
+                  {auth.username.length > 3 ? (
+                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                      <Link to={""}>Sign out</Link>
+                    </li>
+                  ) : (
+                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                      <Link to="/register">Sign up</Link>
+                    </li>
+                  )}
+                  {auth.username.length > 3 ? (
+                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
+                      <Link to="/register">Sign up</Link>
+                    </li>
+                  ) : null}
                 </div>
               </ul>
             </div>

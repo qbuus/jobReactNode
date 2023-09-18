@@ -72,7 +72,7 @@ const SignLayout = () => {
             </nav>
           </div>
         </header>
-        <main className="grow flex bg-base-300">
+        <main className="grow flex bg-base-300 z-0">
           <Outlet />
         </main>
       </div>

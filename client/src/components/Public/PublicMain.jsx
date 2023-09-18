@@ -1,8 +1,15 @@
-import React from "react";
 import useAuth from "../../hooks/useAuth";
 
 const PublicMain = () => {
-  return <div>213231123231231213231</div>;
+  const auth = useAuth();
+
+  console.log(auth);
+
+  return (
+    <>
+      <div>{!auth?.username ? 123 : auth.username}</div>
+    </>
+  );
 };
 
 export default PublicMain;

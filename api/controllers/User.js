@@ -185,34 +185,29 @@ export const login = async (req, res) => {
       .json({ message: "Password is not correct" });
   }
 
-  const accessToken = jwt.sign(
+  jwt.sign(
     {
-      UserInfo: {
-        username: foundUser.username,
-        role: foundUser.role,
-        id: foundUser._id,
-      },
+      username: foundUser.username,
+      role: foundUser.role,
+      id: foundUser._id,
     },
     secret,
     {
-      expiresIn: "1d",
+      expiresIn: "3d",
+    },
+    async (err, token) => {
+      if (err) return res.json({ message: "Forbidden" });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.json({ accessToken: token });
     }
   );
-
-  const refreshToken = jwt.sign(
-    { username: foundUser.username },
-    secret,
-    { expiresIn: "7d" }
-  );
-
-  res.cookie("token", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-
-  res.json({ accessToken });
 };
 
 export const changePassword = async (req, res) => {
@@ -227,7 +222,9 @@ export const changePassword = async (req, res) => {
     if (err)
       return res.status(403).json({ message: "Forbidden" });
 
-    const user = await userModel.findById(decoded.id);
+    const user = await userModel.findOne({
+      username: decoded.username,
+    });
 
     if (!user) {
       return res
@@ -273,15 +270,13 @@ export const refreshToken = async (req, res) => {
 
   if (!token) return res.sendStatus(204);
 
-  const tokenToRefresh = token;
-
-  jwt.verify(tokenToRefresh, secret, async (err, decoded) => {
+  jwt.verify(token, secret, async (err, decoded) => {
     if (err)
       return res.status(403).json({ message: "Forbidden" });
 
-    const user = await userModel
-      .findOne({ username: decoded.username })
-      .exec();
+    const user = await userModel.findOne({
+      username: decoded.username,
+    });
 
     if (!user) {
       return res
@@ -289,18 +284,19 @@ export const refreshToken = async (req, res) => {
         .json({ message: "User not found" });
     }
 
-    const accessToken = jwt.sign(
+    jwt.sign(
       {
-        UserInfo: {
-          username: user.username,
-          role: user.role,
-          id: user._id,
-        },
+        username: user.username,
+        role: user.role,
+        id: user._id,
       },
       secret,
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
+      async (err, token) => {
+        if (err) return res.json({ message: "Forbidden" });
+        res.json({ accessToken: token });
+      }
     );
-    res.json({ accessToken });
   });
 };
 

@@ -10,7 +10,7 @@ const useAuth = () => {
 
   if (token) {
     const decoded = jwtDecode(token);
-    const { username, role, id } = decoded.UserInfo;
+    const { username, role, id } = decoded;
 
     isSeeker = role.includes("Seeker");
     isRecruiter = role.includes("Recruiter");
