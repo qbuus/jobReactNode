@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
-import { CiUser } from "react-icons/ci";
 import ThemeChooser from "../Theme/ThemeChooser";
 import useAuth from "../../hooks/useAuth";
+import UserOptions from "../Auth/UserOptions";
 
 const HeaderNav = () => {
   const location = useLocation();
@@ -143,7 +143,8 @@ const HeaderNav = () => {
                 </Link>
               </div>
             )}
-            <div className="dropdown dropdown-end">
+            <UserOptions />
+            {/* <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
                 className="btn btn-sm md:btn-md btn-ghost btn-cirlce flex items-center justify-center"
@@ -174,21 +175,17 @@ const HeaderNav = () => {
                   ) : null}
                   {auth.username.length > 3 ? (
                     <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <Link to={""}>Sign out</Link>
+                      <SignOut />
                     </li>
-                  ) : (
+                  ) : null}
+                  {auth.username.length > 3 ? null : (
                     <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                       <Link to="/register">Sign up</Link>
                     </li>
                   )}
-                  {auth.username.length > 3 ? (
-                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <Link to="/register">Sign up</Link>
-                    </li>
-                  ) : null}
                 </div>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
