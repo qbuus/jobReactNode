@@ -1,31 +1,20 @@
-import UseTheme from "../../hooks/useTheme";
-import { useState } from "react";
+import { useEffect } from "react";
 import themeData from "../../config/ThemeData.js";
+import { themeChange } from "theme-change";
 
 const ThemeChooser = () => {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("portalTheme") ?? "light"
-  );
-  const [active, setActive] = useState(null);
-
-  UseTheme(theme, setTheme);
+  useEffect(() => {
+    themeChange(false);
+  }, []);
 
   return (
     <>
       {themeData
         ? themeData.map((theme, index) => (
             <li
-              className={`text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2 ${
-                active === index && "btn-active"
-              }`}
-              key={theme.theme}
-              onClick={(e) => {
-                e.preventDefault();
-                setTheme(theme.theme);
-                setActive((val) =>
-                  val === index ? null : index
-                );
-              }}
+              data-set-theme={`${theme.theme}`}
+              className="ACTIVECLASS"
+              key={index}
             >
               {theme.theme}
             </li>

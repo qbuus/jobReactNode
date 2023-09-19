@@ -2,11 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../Redux/Auth/authSlice";
-import useDocumentTitle from "../../hooks/useDocumentTitle.js";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice.js";
 
 const LoginForm = () => {
-  useDocumentTitle("Login");
   const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");

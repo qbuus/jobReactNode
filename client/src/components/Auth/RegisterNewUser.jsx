@@ -8,8 +8,13 @@ import {
 } from "react-icons/bi";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice";
 import Loader from "../FeatureComponents/Loader";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const RegisterNewUser = () => {
+  const title = "Sign up";
+  const description = "Create a new account";
+  useDocumentTitle({ title, description });
+
   const { isLoading } = useLoginMutation();
 
   return (

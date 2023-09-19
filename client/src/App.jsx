@@ -5,8 +5,14 @@ import Login from "./components/Auth/Login";
 import PublicMain from "./components/Public/PublicMain";
 import RegisterNewUser from "./components/Auth/RegisterNewUser";
 import SignLayout from "./components/Auth/SignLayout";
+import { themeChange } from "theme-change";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    themeChange(false);
+  }, []);
+
   return (
     <>
       <Routes>

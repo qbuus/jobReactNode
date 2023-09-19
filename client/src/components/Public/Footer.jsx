@@ -1,10 +1,9 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 
 const Footer = () => {
   return (
-    <div className="footer z-30 px-10 py-2 bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content">
+    <div className="footer px-10 py-2 bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content">
       <aside>
         <div className="flex flex-col">
           <div className="flex flex-row gap-2 items-center">

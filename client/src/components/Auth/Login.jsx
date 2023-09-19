@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import {
@@ -14,8 +13,13 @@ import {
 } from "react-icons/bi";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice";
 import Loader from "../FeatureComponents/Loader";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const Login = () => {
+  const title = "Sign in";
+  const description = "Sign in an existing user to job portal";
+  useDocumentTitle({ title, description });
+
   const { isLoading } = useLoginMutation();
 
   return (
