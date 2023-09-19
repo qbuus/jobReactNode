@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 import ThemeChooser from "../Theme/ThemeChooser";
@@ -119,7 +118,9 @@ const HeaderNav = () => {
                 </ul>
               </div>
             </div>
-            {auth.username.length > 3 ? null : (
+            {auth?.userID.length > 0 &&
+            auth?.role.length > 0 &&
+            auth?.username.length > 3 ? null : (
               <div className="dropdown dropdown-end">
                 <Link
                   to={
@@ -144,48 +145,6 @@ const HeaderNav = () => {
               </div>
             )}
             <UserOptions />
-            {/* <div className="dropdown dropdown-end">
-              <label
-                tabIndex={0}
-                className="btn btn-sm md:btn-md btn-ghost btn-cirlce flex items-center justify-center"
-              >
-                <div className="rounded-full">
-                  <CiUser className="h-6 w-6" />
-                </div>
-              </label>
-              <ul
-                className="dropdown-content bg-base-200 text-base-content rounded-box top-px max-h-96 w-56 overflow-y-auto shadow mt-16"
-                tabIndex={0}
-              >
-                <div className="grid grid-cols-1 gap-4 p-3">
-                  {auth.username ? (
-                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <Link>Profile</Link>
-                    </li>
-                  ) : null}
-                  {auth.username.length > 3 ? (
-                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <Link>
-                        Settings
-                        <span className="badge ml-3 bg-base-100">
-                          New
-                        </span>
-                      </Link>
-                    </li>
-                  ) : null}
-                  {auth.username.length > 3 ? (
-                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <SignOut />
-                    </li>
-                  ) : null}
-                  {auth.username.length > 3 ? null : (
-                    <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                      <Link to="/register">Sign up</Link>
-                    </li>
-                  )}
-                </div>
-              </ul>
-            </div> */}
           </div>
         </div>
       </nav>

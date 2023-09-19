@@ -1,29 +1,32 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUserData } from "../../Redux/Auth/authSlice";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice.js";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const messageSelector = useSelector(
+    (state) => state.messageData.message
+  );
+  const errorMessageSelector = useSelector(
+    (state) => state.messageData.errorMessage
+  );
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [login] = useLoginMutation();
-
-  const dispatch = useDispatch();
+  const [login, { isSuccess }] = useLoginMutation();
 
   async function handleLogin(e) {
     e.preventDefault();
 
     try {
-      const { accessToken } = await login({
+      await login({
         username,
         password,
-      }).unwrap();
-      dispatch(setUserData(accessToken));
-      navigate("/");
+      });
+      isSuccess && navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -32,12 +35,29 @@ const LoginForm = () => {
   const setUserPassword = (e) => setPassword(e.target.value);
   const setUserUsername = (e) => setUsername(e.target.value);
 
+  const notify = () => {
+    toast(`User signed in`, {
+      position: toast.POSITION.BOTTOM_LEFT,
+    });
+  };
+
   return (
     <>
+      {isSuccess ? notify() : null}
       <form
         className="flex flex-col gap-3"
         onSubmit={handleLogin}
       >
+        {errorMessageSelector ? (
+          <div className="text-error font-semibold">
+            {errorMessageSelector}
+          </div>
+        ) : null}
+        {messageSelector ? (
+          <div className="text-neutral-content font-semibold">
+            {messageSelector}
+          </div>
+        ) : null}
         <div>
           <label className="label">
             <span className="text-base label-text font-semibold">

@@ -8,8 +8,7 @@ import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
 const UserOptions = () => {
   const auth = useAuth();
 
-  const [refresh, { isSuccess, isLoading }] =
-    useRefreshMutation();
+  const [refresh, { isLoading }] = useRefreshMutation();
 
   React.useEffect(() => {
     async function loadUserBeforehand() {

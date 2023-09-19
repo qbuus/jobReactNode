@@ -1,5 +1,9 @@
 import { apiSliceWithAuth } from "../Api/apiSlice";
 import { setUserData, signOut } from "./authSlice";
+import {
+  setMessage,
+  setErrorMessage,
+} from "../states/messageSlice";
 
 export const authApiSlice = apiSliceWithAuth.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,16 +13,25 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
         method: "POST",
         body: { ...userCredentials },
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+
+          if (data.data?.accessToken) {
+            dispatch(setUserData(data.data.accessToken));
+          }
+          dispatch(setMessage(data.data.message));
+        } catch (error) {
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
     }),
     refresh: builder.mutation({
       query: () => ({
         url: "/users/refreshToken",
         method: "GET",
       }),
-      async onQueryStarted(
-        arg,
-        { dispatch, getState, queryFulfilled }
-      ) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const data = await queryFulfilled;
           if (!data.data?.accessToken) {
@@ -27,7 +40,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
             dispatch(setUserData(data.data.accessToken));
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       },
     }),

@@ -51,7 +51,7 @@ const RegiserForm = () => {
 
   function BackdropLoader() {
     return (
-      <div className="fixed bg-primary bg-opacity-30 z-100 h-full w-full flex items-center justify-center">
+      <div className="fixed bg-black bg-opacity-50 z-100 h-full w-full flex items-center justify-center">
         <span className="loading loading-spinner text-neutral"></span>
       </div>
     );
@@ -149,6 +149,10 @@ const RegiserForm = () => {
         </div>
         <div>
           <Roles change={handleInputChange} value={role} />
+        </div>
+        <div className="flex items-center gap-2">
+          <input required type="checkbox" />
+          <label>Accept terms of service</label>
         </div>
         <div>
           <button
