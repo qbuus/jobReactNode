@@ -25,12 +25,12 @@ const LoginForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
-        dispatch(setMessage(null));
-        dispatch(setErrorMessage(null));
+        dispatch(setMessage(""));
+        dispatch(setErrorMessage(""));
         navigate("/");
       }, 1000);
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess, navigate, dispatch]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -54,12 +54,12 @@ const LoginForm = () => {
         className="flex flex-col gap-3"
         onSubmit={handleLogin}
       >
-        {errorMessageSelector ? (
+        {errorMessageSelector > 0 ? (
           <div className="text-error font-normal text-sm">
             {errorMessageSelector}
           </div>
         ) : null}
-        {messageSelector ? (
+        {messageSelector > 0 ? (
           <div className="text-neutral-content font-semibold text-lg">
             {messageSelector}
           </div>

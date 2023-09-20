@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSignOutMutation } from "../../Redux/Auth/authApiSlice";
 import Loader from "../FeatureComponents/Loader";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +14,18 @@ const SignOut = () => {
 
     try {
       await signOut();
-      navigate("/");
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  }, [navigate, isSuccess]);
 
   return (
     <>
