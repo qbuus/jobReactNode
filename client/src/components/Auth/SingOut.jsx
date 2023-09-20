@@ -20,11 +20,7 @@ const SignOut = () => {
   }
 
   useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
-    }
+    navigate("/");
   }, [navigate, isSuccess]);
 
   return (

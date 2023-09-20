@@ -1,4 +1,5 @@
 import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const PublicMain = () => {
   const auth = useAuth();
@@ -6,6 +7,10 @@ const PublicMain = () => {
   return (
     <>
       <div>{!auth?.email ? 123 : auth.email}</div>
+
+      <button className="btn m-auto">
+        <Link to="/test">Route Test</Link>
+      </button>
     </>
   );
 };

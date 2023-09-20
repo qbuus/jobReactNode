@@ -1,16 +1,14 @@
-import React from "react";
 import { CiUser } from "react-icons/ci";
 import SignOut from "../Auth/SingOut";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
+import { useEffect } from "react";
 
 const UserOptions = () => {
-  const auth = useAuth();
+  const [refresh, { isSuccess, status }] = useRefreshMutation();
 
-  const [refresh, { isLoading }] = useRefreshMutation();
-
-  React.useEffect(() => {
+  useEffect(() => {
     async function loadUserBeforehand() {
       try {
         await refresh();
@@ -21,16 +19,14 @@ const UserOptions = () => {
     loadUserBeforehand();
   }, []);
 
+  const auth = useAuth();
+  console.log(auth);
+
   return (
     <>
-      {isLoading ? (
-        <div className="flex items-center justify-center">
-          <div>
-            <span className="loading loading-spinner text-neutral-content loading-sm"></span>
-          </div>
-        </div>
-      ) : null}
-      {auth?.userID.length > 0 &&
+      {isSuccess &&
+      status === "fulfilled" &&
+      auth?.userID.length > 0 &&
       auth?.role.length > 0 &&
       auth?.email.length > 0 ? (
         <div className="dropdown dropdown-end">
@@ -49,7 +45,7 @@ const UserOptions = () => {
             <div className="grid grid-cols-1 gap-4 p-3">
               {auth.email ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
-                  <Link>Profile</Link>
+                  <Link to="/my-profile">Profile</Link>
                 </li>
               ) : null}
               {auth.email.length > 3 ? (

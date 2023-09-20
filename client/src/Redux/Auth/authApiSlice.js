@@ -19,6 +19,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
 
           if (data.data?.accessToken) {
             dispatch(setUserData(data.data.accessToken));
+            window.localStorage.setItem("isLogged", true);
           }
           dispatch(setMessage(data.data.message));
         } catch (error) {
@@ -34,10 +35,11 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const data = await queryFulfilled;
-          if (!data.data?.accessToken) {
-            return;
-          } else {
+          if (data.data?.accessToken) {
             dispatch(setUserData(data.data.accessToken));
+            window.localStorage.setItem("isLogged", true);
+          } else {
+            window.localStorage.setItem("isLogged", false);
           }
         } catch (error) {
           console.error(error);
@@ -52,6 +54,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          window.localStorage.setItem("isLogged", false);
           dispatch(signOut());
           setTimeout(() => {
             dispatch(apiSliceWithAuth.util.resetApiState());

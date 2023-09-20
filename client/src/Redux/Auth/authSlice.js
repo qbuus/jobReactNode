@@ -2,9 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const AuthSlice = createSlice({
   name: "userData",
-  initialState: {
-    token: null,
-  },
+  initialState: { token: null },
   reducers: {
     setUserData: (state, action) => {
       const accessToken = action.payload;
