@@ -54,7 +54,7 @@ export const createUser = async (req, res, next) => {
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const passwordRegex =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,14}$/;
 
   if (!firstName || !lastName || !password || !email) {
     return res
@@ -79,7 +79,7 @@ export const createUser = async (req, res, next) => {
   if (!passwordRegex.test(password)) {
     return res.status(422).json({
       message:
-        "Password must be at least 6 characters long. Must have at least 1 uppercase, 1 lowercase, 1 number [0-9]",
+        "Password must be between 6 and 14 characters long. Must have at least 1 uppercase, 1 lowercase, 1 number [0-9]",
     });
   }
 
