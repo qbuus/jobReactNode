@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-const Roles = ({ value, change }) => {
+const Roles = ({ value, change, disabled }) => {
   const SelectRole = () => {
     return (
       <>
@@ -11,6 +11,7 @@ const Roles = ({ value, change }) => {
           </span>
         </label>
         <select
+          disabled={disabled}
           onChange={change}
           value={value}
           name="role"

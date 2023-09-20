@@ -120,7 +120,7 @@ const HeaderNav = () => {
             </div>
             {auth?.userID.length > 0 &&
             auth?.role.length > 0 &&
-            auth?.username.length > 3 ? null : (
+            auth?.email.length > 0 ? null : (
               <div className="dropdown dropdown-end">
                 <Link
                   to={

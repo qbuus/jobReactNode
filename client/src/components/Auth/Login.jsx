@@ -57,7 +57,7 @@ const Login = () => {
         </div>
         <div className="flex flex-col gap-3 md:gap-6">
           <div>
-            <p className="text-md font-normal">
+            <p className="text-md font-normal text-center">
               Look for an offer in your favorite technology
             </p>
           </div>

@@ -32,7 +32,7 @@ const UserOptions = () => {
       ) : null}
       {auth?.userID.length > 0 &&
       auth?.role.length > 0 &&
-      auth?.username.length > 3 ? (
+      auth?.email.length > 0 ? (
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
@@ -47,12 +47,12 @@ const UserOptions = () => {
             tabIndex={0}
           >
             <div className="grid grid-cols-1 gap-4 p-3">
-              {auth.username ? (
+              {auth.email ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>Profile</Link>
                 </li>
               ) : null}
-              {auth.username.length > 3 ? (
+              {auth.email.length > 3 ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>
                     Settings
@@ -62,12 +62,12 @@ const UserOptions = () => {
                   </Link>
                 </li>
               ) : null}
-              {auth.username.length > 3 ? (
+              {auth.email.length > 3 ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <SignOut />
                 </li>
               ) : null}
-              {auth.username.length > 3 ? (
+              {auth.email.length > 0 ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link to="/register">Sign up</Link>
                 </li>

@@ -10,7 +10,7 @@ const useAuth = () => {
 
   if (token) {
     const decoded = jwtDecode(token);
-    const { username, role, id } = decoded;
+    const { email, role, id } = decoded;
 
     isSeeker = role.includes("Seeker");
     isRecruiter = role.includes("Recruiter");
@@ -21,7 +21,7 @@ const useAuth = () => {
     userID = id;
 
     return {
-      username,
+      email,
       role,
       status,
       isSeeker,
@@ -31,7 +31,7 @@ const useAuth = () => {
   }
 
   return {
-    username: "",
+    email: "",
     role: "",
     isRecruiter,
     isSeeker,

@@ -23,7 +23,7 @@ export const initialTokenCheck = async (req, res) => {
 
     const foundLoggedInUser = await userModel
       .findOne({
-        username: decoded.username,
+        email: decoded.email,
       })
       .exec();
 
@@ -34,9 +34,9 @@ export const initialTokenCheck = async (req, res) => {
     const alreadyAccessedToken = jwt.sign(
       {
         UserInfo: {
-          username: foundLoggedInUser,
-          role: foundLoggedInUser,
-          id: foundLoggedInUser,
+          email: foundLoggedInUser.email,
+          role: foundLoggedInUser.role,
+          id: foundLoggedInUser._id,
         },
       },
       secret,
@@ -47,14 +47,8 @@ export const initialTokenCheck = async (req, res) => {
 };
 
 export const createUser = async (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    password,
-    email,
-    role,
-  } = req.body;
+  const { firstName, lastName, password, email, role } =
+    req.body;
 
   const emailRegexp =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -62,16 +56,10 @@ export const createUser = async (req, res, next) => {
   const passwordRegex =
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
-  if (
-    !firstName ||
-    !lastName ||
-    !username ||
-    !password ||
-    !email
-  ) {
+  if (!firstName || !lastName || !password || !email) {
     return res
       .status(400)
-      .json({ message: "All these field are required" });
+      .json({ message: "All these fields are required" });
   }
 
   const isUserDuplicate = await userModel.findOne({ email });
@@ -79,7 +67,7 @@ export const createUser = async (req, res, next) => {
   if (isUserDuplicate) {
     return res
       .status(409)
-      .json({ message: "User already exists" });
+      .json({ message: "Email already exists" });
   }
 
   if (!emailRegexp.test(email)) {
@@ -88,16 +76,10 @@ export const createUser = async (req, res, next) => {
       .json({ message: "email is not valid" });
   }
 
-  if (username.length < 3) {
-    return res.status(400).json({
-      message: "Password must be at least 3 characters long",
-    });
-  }
-
   if (!passwordRegex.test(password)) {
     return res.status(422).json({
       message:
-        "Password must have at least one uppercase and lowercase letter. Must have at least one digit and be at least 6 characters long",
+        "Password must be at least 6 characters long. Must have at least 1 uppercase, 1 lowercase, 1 number [0-9]",
     });
   }
 
@@ -110,20 +92,20 @@ export const createUser = async (req, res, next) => {
   const newUser = await userModel.create({
     firstName,
     lastName,
-    username,
     email,
     password: hashedPassword,
     role,
   });
 
   if (newUser) {
-    res
-      .status(201)
-      .json({ message: `New user ${username} created` });
+    return res.status(201).json({
+      message: "New user created. You can now sign in",
+    });
   } else {
-    res
-      .status(400)
-      .json({ message: "Invalid user data received" });
+    return res.status(400).json({
+      message:
+        "Invalid user data received. Check the fields one more time",
+    });
   }
 };
 
@@ -154,24 +136,24 @@ export const getAllUser = async (req, res, next) => {
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !password) {
+  if (!email || !password) {
     return res
       .status(400)
-      .json({ message: "All these field are required" });
+      .json({ message: "All these fields are required" });
   }
 
   const foundUser = await userModel
     .findOne({
-      username: username,
+      email: email,
     })
     .exec();
 
   if (!foundUser) {
     return res
       .status(404)
-      .json({ message: "User does not exist" });
+      .json({ message: "Email does not exist" });
   }
 
   const PassMatch = await bcrypt.compare(
@@ -187,7 +169,7 @@ export const login = async (req, res) => {
 
   jwt.sign(
     {
-      username: foundUser.username,
+      email: foundUser.email,
       role: foundUser.role,
       id: foundUser._id,
     },
@@ -196,7 +178,8 @@ export const login = async (req, res) => {
       expiresIn: "3d",
     },
     async (err, token) => {
-      if (err) return res.json({ message: "Forbidden" });
+      if (err)
+        return res.status(403), json({ message: "Forbidden" });
 
       res.cookie("token", token, {
         httpOnly: true,
@@ -223,7 +206,7 @@ export const changePassword = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
 
     const user = await userModel.findOne({
-      username: decoded.username,
+      email: decoded.email,
     });
 
     if (!user) {
@@ -275,7 +258,7 @@ export const refreshToken = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
 
     const user = await userModel.findOne({
-      username: decoded.username,
+      email: decoded.email,
     });
 
     if (!user) {
@@ -286,7 +269,7 @@ export const refreshToken = async (req, res) => {
 
     jwt.sign(
       {
-        username: user.username,
+        email: user.email,
         role: user.role,
         id: user._id,
       },
@@ -350,7 +333,6 @@ export const updateUserBesidePassword = async (req, res) => {
 
     user.firstName = req.body.firstName;
     user.lastName = req.body.lastNameName;
-    user.username = req.body.username;
     user.email = req.body.email;
     user.role = req.body.role;
 

@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice.js";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setErrorMessage,
+  setMessage,
+} from "../../Redux/states/messageSlice.js";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const messageSelector = useSelector(
     (state) => state.messageData.message
@@ -13,63 +17,67 @@ const LoginForm = () => {
     (state) => state.messageData.errorMessage
   );
 
-  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [login, { isSuccess }] = useLoginMutation();
+  const [login, { isSuccess, isLoading }] = useLoginMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        dispatch(setMessage(null));
+        dispatch(setErrorMessage(null));
+        navigate("/");
+      }, 1000);
+    }
+  }, [isSuccess, navigate]);
 
   async function handleLogin(e) {
     e.preventDefault();
 
     try {
       await login({
-        username,
+        email,
         password,
       });
-      isSuccess && navigate("/");
     } catch (err) {
       console.log(err);
     }
   }
 
   const setUserPassword = (e) => setPassword(e.target.value);
-  const setUserUsername = (e) => setUsername(e.target.value);
-
-  const notify = () => {
-    toast(`User signed in`, {
-      position: toast.POSITION.BOTTOM_LEFT,
-    });
-  };
+  const setUserEmail = (e) => setEmail(e.target.value);
 
   return (
     <>
-      {isSuccess ? notify() : null}
       <form
         className="flex flex-col gap-3"
         onSubmit={handleLogin}
       >
         {errorMessageSelector ? (
-          <div className="text-error font-semibold">
+          <div className="text-error font-normal text-sm">
             {errorMessageSelector}
           </div>
         ) : null}
         {messageSelector ? (
-          <div className="text-neutral-content font-semibold">
+          <div className="text-neutral-content font-semibold text-lg">
             {messageSelector}
           </div>
         ) : null}
         <div>
           <label className="label">
             <span className="text-base label-text font-semibold">
-              Username
+              Email
             </span>
           </label>
           <input
+            disabled={isLoading}
+            autoComplete="on"
             required
-            value={username}
-            onChange={setUserUsername}
-            type="text"
-            placeholder="Username"
+            value={email}
+            onChange={setUserEmail}
+            type="email"
+            placeholder="Email"
             className="input input-bordered input-primary md:w-max w-full"
           />
         </div>
@@ -80,6 +88,8 @@ const LoginForm = () => {
             </span>
           </label>
           <input
+            disabled={isLoading}
+            autoComplete="on"
             required
             value={password}
             onChange={setUserPassword}
@@ -90,6 +100,7 @@ const LoginForm = () => {
         </div>
         <div>
           <button
+            disabled={isLoading}
             type="submit"
             className="btn btn-primary md:w-max w-full"
           >

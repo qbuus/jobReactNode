@@ -1,29 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Roles from "../FeatureComponents/Roles";
 import axios from "axios";
+import Loader from "../FeatureComponents/Loader";
 import { useNavigate } from "react-router-dom";
 
 const RegiserForm = () => {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [status, setStatus] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
     firstName: "",
     lastName: "",
-    username: "",
     password: "",
     email: "",
     role: "Seeker",
   });
-  const {
-    firstName,
-    lastName,
-    username,
-    password,
-    email,
-    role,
-  } = formData;
+  const { firstName, lastName, password, email, role } =
+    formData;
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -40,7 +35,14 @@ const RegiserForm = () => {
         formData
       );
       setMessage(response.data.message);
-      navigate("/");
+      setStatus(response.status);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        password: "",
+        email: "",
+        role: "Seeker",
+      });
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setLoading(false);
@@ -49,22 +51,23 @@ const RegiserForm = () => {
     }
   }
 
-  function BackdropLoader() {
-    return (
-      <div className="fixed bg-black bg-opacity-50 z-100 h-full w-full flex items-center justify-center">
-        <span className="loading loading-spinner text-neutral"></span>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (status === 201) {
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  }, [status, navigate]);
 
   return (
     <>
-      {loading ? <BackdropLoader /> : null}
       {message.length > 0 ? (
-        <p className="text-success font-semibold">{message}</p>
+        <p className="text-success font-semibold text-lg">
+          {message}
+        </p>
       ) : null}
       {errorMessage.length > 0 ? (
-        <p className="text-error font-semibold">
+        <p className="text-error font-normal text-sm">
           {errorMessage}
         </p>
       ) : null}
@@ -79,6 +82,8 @@ const RegiserForm = () => {
             </span>
           </label>
           <input
+            autoComplete="on"
+            disabled={loading}
             value={firstName}
             onChange={handleInputChange}
             name="firstName"
@@ -94,6 +99,8 @@ const RegiserForm = () => {
             </span>
           </label>
           <input
+            autoComplete="on"
+            disabled={loading}
             onChange={handleInputChange}
             value={lastName}
             name="lastName"
@@ -105,25 +112,12 @@ const RegiserForm = () => {
         <div>
           <label className="label">
             <span className="text-base label-text font-semibold">
-              Username
-            </span>
-          </label>
-          <input
-            onChange={handleInputChange}
-            value={username}
-            name="username"
-            type="text"
-            placeholder="Username"
-            className="input input-bordered input-primary md:min-w-max w-full"
-          />
-        </div>
-        <div>
-          <label className="label">
-            <span className="text-base label-text font-semibold">
               Password
             </span>
           </label>
           <input
+            autoComplete="on"
+            disabled={loading}
             onChange={handleInputChange}
             value={password}
             name="password"
@@ -139,28 +133,39 @@ const RegiserForm = () => {
             </span>
           </label>
           <input
+            autoComplete="on"
+            disabled={loading}
             onChange={handleInputChange}
             value={email}
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="@"
             className="input input-bordered input-primary md:min-w-max w-full"
           />
         </div>
         <div>
-          <Roles change={handleInputChange} value={role} />
+          <Roles
+            change={handleInputChange}
+            value={role}
+            disabled={loading}
+          />
         </div>
         <div className="flex items-center gap-2">
-          <input required type="checkbox" />
+          <input
+            autoComplete="on"
+            required
+            type="checkbox"
+            disabled={loading}
+          />
           <label>Accept terms of service</label>
         </div>
         <div>
           <button
             disabled={loading}
             type="submit"
-            className="btn btn-primary md:min-w-max w-full"
+            className="btn btn-primary md:min-w-max w-full relative"
           >
-            Register Now
+            {loading ? <Loader /> : "Register"}
           </button>
         </div>
       </form>
