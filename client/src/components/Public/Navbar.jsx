@@ -7,6 +7,8 @@ import UserOptions from "../Auth/UserOptions";
 const HeaderNav = () => {
   const location = useLocation();
 
+  const loggedIn = window.localStorage.getItem("isLogged");
+
   const auth = useAuth();
 
   return (
@@ -118,9 +120,7 @@ const HeaderNav = () => {
                 </ul>
               </div>
             </div>
-            {auth?.userID.length > 0 &&
-            auth?.role.length > 0 &&
-            auth?.email.length > 0 ? null : (
+            {loggedIn === "true" ? null : (
               <div className="dropdown dropdown-end">
                 <Link
                   to={

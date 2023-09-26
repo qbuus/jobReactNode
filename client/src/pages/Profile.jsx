@@ -1,5 +1,13 @@
+import useAuth from "../hooks/useAuth";
+
 const Profile = () => {
-  return <div>Profile</div>;
+  const auth = useAuth();
+
+  return (
+    <>
+      <p>{auth.userID}</p>
+    </>
+  );
 };
 
 export default Profile;

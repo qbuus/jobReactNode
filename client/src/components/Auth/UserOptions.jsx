@@ -2,33 +2,15 @@ import { CiUser } from "react-icons/ci";
 import SignOut from "../Auth/SingOut";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
-import { useEffect } from "react";
 
 const UserOptions = () => {
-  const [refresh, { isSuccess, status }] = useRefreshMutation();
-
-  useEffect(() => {
-    async function loadUserBeforehand() {
-      try {
-        await refresh();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    loadUserBeforehand();
-  }, []);
-
   const auth = useAuth();
-  console.log(auth);
+
+  const loggedIn = window.localStorage.getItem("isLogged");
 
   return (
     <>
-      {isSuccess &&
-      status === "fulfilled" &&
-      auth?.userID.length > 0 &&
-      auth?.role.length > 0 &&
-      auth?.email.length > 0 ? (
+      {loggedIn === "true" ? (
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
@@ -43,12 +25,12 @@ const UserOptions = () => {
             tabIndex={0}
           >
             <div className="grid grid-cols-1 gap-4 p-3">
-              {auth.email ? (
+              {loggedIn === "true" ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link to="/my-profile">Profile</Link>
                 </li>
               ) : null}
-              {auth.email.length > 3 ? (
+              {loggedIn === "true" ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link>
                     Settings
@@ -58,12 +40,12 @@ const UserOptions = () => {
                   </Link>
                 </li>
               ) : null}
-              {auth.email.length > 3 ? (
+              {loggedIn === "true" ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <SignOut />
                 </li>
               ) : null}
-              {auth.email.length > 0 ? (
+              {loggedIn === "true" ? (
                 <li className="text-center outline-base-content overflow-hidden rounded-lg hover:bg-base-100 p-2">
                   <Link to="/register">Sign up</Link>
                 </li>

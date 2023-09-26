@@ -54,12 +54,12 @@ const LoginForm = () => {
         className="flex flex-col gap-3"
         onSubmit={handleLogin}
       >
-        {errorMessageSelector > 0 ? (
+        {errorMessageSelector !== null ? (
           <div className="text-error font-normal text-sm">
             {errorMessageSelector}
           </div>
         ) : null}
-        {messageSelector > 0 ? (
+        {messageSelector !== null ? (
           <div className="text-neutral-content font-semibold text-lg">
             {messageSelector}
           </div>
