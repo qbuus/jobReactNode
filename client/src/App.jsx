@@ -8,8 +8,9 @@ import Profile from "./pages/Profile";
 import Layout from "./components/Layout.jsx";
 import { useEffect } from "react";
 import { themeChange } from "theme-change";
-import AuthRequired from "./components/Auth/AuthRequired.jsx";
 import RememberLogin from "./components/Auth/RememberLogin.jsx";
+import ProfileLayout from "./components/Profile/ProfileLayout.jsx";
+import MyApplications from "./components/Profile/MyApplications.jsx";
 
 function App() {
   useEffect(() => {
@@ -32,11 +33,18 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route index element={<PublicMain />} />
           </Route>
-          <Route element={<RememberLogin />}>
-            <Route element={<AuthRequired />}>
-              <Route path="my-profile">
-                <Route index element={<Profile />} />
-              </Route>
+
+          <Route element={<ProfileLayout />}>
+            <Route element={<RememberLogin />}>
+              <Route
+                index
+                path="my-profile"
+                element={<Profile />}
+              />
+              <Route
+                path="my-applications"
+                element={<MyApplications />}
+              />
             </Route>
           </Route>
         </Route>

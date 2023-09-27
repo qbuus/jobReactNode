@@ -341,3 +341,31 @@ export const updateUserBesidePassword = async (req, res) => {
     res.json({ message: "Data changed successfully" });
   });
 };
+
+export const getSingleUser = (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, secret, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const foundUser = await userModel
+      .findById(decoded.id)
+      .select(
+        "-password -_id -__v -active -isLoggedIn -createdAt -updatedAt"
+      );
+
+    if (!foundUser) {
+      return res
+        .status(404)
+        .json({ message: "User not found" });
+    }
+
+    res.json(foundUser);
+  });
+};

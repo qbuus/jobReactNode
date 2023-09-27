@@ -12,7 +12,7 @@ router.get("/initialCheck", userRouter.initialTokenCheck);
 router.post("/create", userRouter.createUser);
 router.get("", userRouter.getAllUser);
 router.post("/login", loginLimiter, userRouter.login);
-router.post(
+router.put(
   "/passwordChange",
   verifyJwt,
   passwordChangeLimiter,
@@ -20,11 +20,12 @@ router.post(
 );
 router.get("/refreshToken", userRouter.refreshToken);
 router.post("/logout", verifyJwt, userRouter.logout);
-router.post(
+router.put(
   "/update",
   verifyJwt,
   passwordChangeLimiter,
   userRouter.updateUserBesidePassword
 );
+router.get("/profile", verifyJwt, userRouter.getSingleUser);
 
 export default router;

@@ -64,6 +64,40 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
         }
       },
     }),
+    editData: builder.mutation({
+      query: (userData) => ({
+        url: "/users/update",
+        method: "PUT",
+        body: { ...userData },
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data.data.message));
+          console.log(data);
+        } catch (error) {
+          console.error(error);
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
+    }),
+    userData: builder.mutation({
+      query: () => ({
+        url: "/users/profile",
+        method: "GET",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data?.data?.message));
+        } catch (error) {
+          dispatch(
+            setErrorMessage(error?.error?.data?.message)
+          );
+          console.error(error);
+        }
+      },
+    }),
   }),
 });
 
@@ -71,4 +105,6 @@ export const {
   useLoginMutation,
   useRefreshMutation,
   useSignOutMutation,
+  useEditDataMutation,
+  useUserDataMutation,
 } = authApiSlice;
