@@ -55,7 +55,7 @@ const RegiserForm = () => {
     if (status === 201) {
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 500);
     }
   }, [status, navigate]);
 

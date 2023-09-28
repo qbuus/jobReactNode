@@ -20,7 +20,7 @@ router.put(
 );
 router.get("/refreshToken", userRouter.refreshToken);
 router.post("/logout", verifyJwt, userRouter.logout);
-router.put(
+router.patch(
   "/update",
   verifyJwt,
   passwordChangeLimiter,

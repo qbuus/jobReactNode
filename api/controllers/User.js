@@ -206,7 +206,7 @@ export const changePassword = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
 
     const user = await userModel.findOne({
-      email: decoded.email,
+      _id: decoded.id,
     });
 
     if (!user) {
@@ -258,7 +258,7 @@ export const refreshToken = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
 
     const user = await userModel.findOne({
-      email: decoded.email,
+      _id: decoded.id,
     });
 
     if (!user) {
@@ -325,14 +325,19 @@ export const updateUserBesidePassword = async (req, res) => {
         .json({ message: "email is not valid" });
     }
 
-    if (username.length < 3) {
-      return res.status(400).json({
-        message: "Password must be at least 3 characters long",
-      });
+    if (
+      (!req.body.role === "") |
+      "Seeker" |
+      "Poster" |
+      "Admin"
+    ) {
+      return res
+        .status(422)
+        .json({ meesage: "Role is invalid" });
     }
 
     user.firstName = req.body.firstName;
-    user.lastName = req.body.lastNameName;
+    user.lastName = req.body.lastName;
     user.email = req.body.email;
     user.role = req.body.role;
 

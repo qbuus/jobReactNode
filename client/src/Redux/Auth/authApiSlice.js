@@ -67,7 +67,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
     editData: builder.mutation({
       query: (userData) => ({
         url: "/users/update",
-        method: "PUT",
+        method: "PATCH",
         body: { ...userData },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
