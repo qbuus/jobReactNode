@@ -1,8 +1,10 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import userModel from "../models/User.js";
+import tokenUser from "../models/Token.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../utils/sendEmail.js";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -373,4 +375,31 @@ export const getSingleUser = (req, res) => {
 
     res.json(foundUser);
   });
+};
+
+export const forgetPassword = async (req, res) => {
+  const { receiver } = req.body;
+
+  const existingEmail = await userModel.findOne({
+    email: receiver,
+  });
+
+  if (!existingEmail) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (existingEmail) {
+    sendEmail({
+      receiver: existingEmail.email,
+      OTP: req.body.OTP,
+    })
+      .then(() =>
+        res.json({ message: "Email sent successfully" })
+      )
+      .catch((error) =>
+        res.status(500).json({
+          message: "There was an error sending your email",
+        })
+      );
+  }
 };

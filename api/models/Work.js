@@ -1,8 +1,8 @@
-import { Schema, Model, Types } from "mongoose";
+import { Schema, Model } from "mongoose";
 
 const workModel = new Schema(
   {
-    owner: { type: Types.ObjectId, ref: "User" },
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
     company: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     position: {
@@ -13,14 +13,14 @@ const workModel = new Schema(
     location: [{ type: String, required: true }],
     applicants: {
       type: Map,
-      of: Types.ObjectId,
+      of: Schema.Types.ObjectId,
       required: false,
     },
     salary: { type: Number, required: false },
     expiresAt: { type: Date, required: false },
     experience: { type: Number, required: true },
     skills: [{ type: String, required: true }],
-    savedBy: [{ type: Types.ObjectId, required: false }],
+    savedBy: [{ type: Schema.Types.ObjectId, required: false }],
     workingHours: {
       type: String,
       required: true,

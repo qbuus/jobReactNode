@@ -11,6 +11,7 @@ import { themeChange } from "theme-change";
 import RememberLogin from "./components/Auth/RememberLogin.jsx";
 import ProfileLayout from "./components/Profile/ProfileLayout.jsx";
 import MyApplications from "./components/Profile/MyApplications.jsx";
+import ResetPassword from "./components/Auth/ResetPassword.jsx";
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,10 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route
+            path="reset-password"
+            element={<ResetPassword />}
+          />
           {/* To auth layout */}
           <Route element={<SignLayout />}>
             <Route path="login" element={<Login />} />

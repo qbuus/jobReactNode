@@ -27,5 +27,10 @@ router.patch(
   userRouter.updateUserBesidePassword
 );
 router.get("/profile", verifyJwt, userRouter.getSingleUser);
+router.post(
+  "/forget-password",
+  // passwordChangeLimiter,
+  userRouter.forgetPassword
+);
 
 export default router;

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../Redux/Auth/authApiSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -102,10 +102,13 @@ const LoginForm = () => {
           <button
             disabled={isLoading}
             type="submit"
-            className="btn btn-primary md:w-max w-full"
+            className="btn btn-primary w-full md:w-max"
           >
             Login
           </button>
+        </div>
+        <div className="text-sm font-semibold">
+          <Link to="/reset-password">Forgot Password ?</Link>
         </div>
       </form>
     </>

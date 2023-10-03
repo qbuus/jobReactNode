@@ -22,5 +22,5 @@ export const passwordChangeLimiter = rateLimit({
       .json({ message: options.message });
   },
   windowMs: 2 * 60 * 1000,
-  max: 4,
+  max: 2,
 });
