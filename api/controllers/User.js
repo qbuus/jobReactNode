@@ -385,21 +385,92 @@ export const forgetPassword = async (req, res) => {
   });
 
   if (!existingEmail) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({
+      message:
+        "User does not exist. Please use correct email address",
+    });
   }
 
   if (existingEmail) {
+    const existingToken = await tokenUser.findOne({
+      userId: existingEmail._id,
+    });
+
+    if (existingToken) {
+      await existingToken.deleteOne();
+    }
+
+    await tokenUser.create({
+      userId: existingEmail._id,
+      createdAt: Date.now(),
+      expireAt: new Date(),
+    });
+
     sendEmail({
       receiver: existingEmail.email,
       OTP: req.body.OTP,
     })
       .then(() =>
-        res.json({ message: "Email sent successfully" })
+        res.json({
+          message: "Check your email to get access code",
+        })
       )
       .catch((error) =>
         res.status(500).json({
           message: "There was an error sending your email",
         })
       );
+  }
+};
+
+export const changePasswordAfterOTP = async (req, res) => {
+  const { email, newPassword, confirmNewPassword } = req.body;
+
+  const passwordRegex =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,14}$/;
+
+  const existingUser = await userModel.findOne({
+    email: email,
+  });
+
+  if (!existingUser) {
+    return res
+      .status(404)
+      .json("There was an error. User not found");
+  }
+
+  if (existingUser) {
+    const userID = existingUser._id;
+    const existingToken = await tokenUser.findOne({
+      userId: userID,
+    });
+
+    if (!existingToken) {
+      return res.status(410).json({
+        message: "Your access token expired. Try again !",
+      });
+    }
+
+    const checkNewPassword = passwordRegex.test(newPassword);
+
+    if (!checkNewPassword) {
+      return res.status(422).json({
+        message:
+          "Password must be between 6 and 14 characters long. Must have at least 1 uppercase, 1 lowercase, 1 number [0-9]",
+      });
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res
+        .status(401)
+        .json({ message: "Passwords do not match" });
+    }
+
+    if (newPassword === confirmNewPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      existingUser.password = hashedPassword;
+      await existingUser.save();
+      res.json({ message: "Password Changed Successfully" });
+    }
   }
 };

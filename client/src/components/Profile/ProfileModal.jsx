@@ -53,8 +53,6 @@ const ProfileModal = ({ name, data }) => {
     }
   }
 
-  console.log(formData);
-
   return (
     <dialog
       id={`${name}`}

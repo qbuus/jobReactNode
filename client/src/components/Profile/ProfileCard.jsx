@@ -47,7 +47,7 @@ const ProfileCard = () => {
           )}
         </div>
       </div>
-      <div className="grow card-body grid grid-cols-1 gap-8 sm:grid-cols-2">
+      <div className="grow card-body grid grid-cols-1 gap-8 md:grid-cols-2">
         {isSuccess && data && !isLoading && (
           <>
             {Object.keys(data).map((key, index) => (

@@ -6,8 +6,8 @@ const TokenModel = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  token: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now, expires: 3600 },
+  createdAt: { type: Date, default: Date.now },
+  expireAt: { type: Date, expires: 300 },
 });
 
 const tokenUser = mongoose.model("Token", TokenModel);

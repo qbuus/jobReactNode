@@ -32,5 +32,10 @@ router.post(
   // passwordChangeLimiter,
   userRouter.forgetPassword
 );
+router.patch(
+  "/set-new-password",
+  // passwordChangeLimiter,
+  userRouter.changePasswordAfterOTP
+);
 
 export default router;

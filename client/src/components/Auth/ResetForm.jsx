@@ -1,12 +1,10 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { RecoveryContext } from "./ResetPassword";
 
 const ResetForm = () => {
   const { email, setEmail, error, setError, setOTP, setPage } =
     useContext(RecoveryContext);
-
-  const [success, setSuccess] = useState(null);
 
   async function navigateToOtp(e) {
     e.preventDefault();
@@ -34,8 +32,6 @@ const ResetForm = () => {
     }
     return alert("Please enter your email");
   }
-
-  console.log(success);
 
   const setUserEmail = (e) => setEmail(e.target.value);
 

@@ -7,15 +7,17 @@ const OTPInput = () => {
   const [OTPinput, setOTPinput] = useState([0, 0, 0, 0]);
   const [disable, setDisable] = useState(true);
 
-  function verifyOTP() {
-    if (parseInt(OTPInput.join("")) === otp) {
+  function verifyOTP(e) {
+    e.preventDefault();
+
+    if (parseInt(OTPinput.join("")) === otp) {
       setPage("reset");
-      return;
+      console.log("code correct");
+    } else {
+      alert(
+        "The code you have entered is not correct, try again or re-send the link"
+      );
     }
-    alert(
-      "The code you have entered is not correct, try again or re-send the link"
-    );
-    return;
   }
 
   useEffect(() => {
@@ -47,6 +49,9 @@ const OTPInput = () => {
                 </span>
               </p>
             </div>
+            <p className="font-semibold text-primary-focus">
+              Please check your spam folder
+            </p>
           </div>
 
           <div>
@@ -125,7 +130,7 @@ const OTPInput = () => {
                 <div className="flex flex-col space-y-5">
                   <div>
                     <button
-                      onClick={() => verifyOTP()}
+                      onClick={verifyOTP}
                       className="btn btn-primary flex flex-row cursor-pointer items-center justify-center text-center w-full border rounded-xl outline-none py-5 text-md shadow-sm"
                     >
                       Verify Account
