@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.get("/initialCheck", userRouter.initialTokenCheck);
-router.post("/create", userRouter.createUser);
+router.post("/create", loginLimiter, userRouter.createUser);
 router.get("", userRouter.getAllUser);
 router.post("/login", loginLimiter, userRouter.login);
 router.put(
@@ -29,12 +29,12 @@ router.patch(
 router.get("/profile", verifyJwt, userRouter.getSingleUser);
 router.post(
   "/forget-password",
-  // passwordChangeLimiter,
+  passwordChangeLimiter,
   userRouter.forgetPassword
 );
 router.patch(
   "/set-new-password",
-  // passwordChangeLimiter,
+  passwordChangeLimiter,
   userRouter.changePasswordAfterOTP
 );
 

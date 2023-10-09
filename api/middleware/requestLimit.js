@@ -9,7 +9,7 @@ export const loginLimiter = rateLimit({
       .status(options.statusCode)
       .json({ message: options.message });
   },
-  windowMs: 2 * 60 * 1000,
+  windowMs: 20 * 60 * 1000,
   max: 8,
 });
 
@@ -21,6 +21,6 @@ export const passwordChangeLimiter = rateLimit({
       .status(options.statusCode)
       .json({ message: options.message });
   },
-  windowMs: 2 * 60 * 1000,
-  max: 2,
+  windowMs: 20 * 60 * 1000,
+  max: 5,
 });

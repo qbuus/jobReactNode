@@ -11,7 +11,7 @@ const ProfileLayout = () => {
       </header>
       <main className="grow flex flex-col bg-base-300 min-h-[85vh]">
         <ProfileMenu />
-        <div className="sm:px-10 py-6 grow px-4">
+        <div className="sm:px-10 py-6 grow px-0">
           <Outlet />
         </div>
       </main>

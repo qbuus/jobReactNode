@@ -1,7 +1,10 @@
 import { MdWorkOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Reminder = () => {
+  const auth = useAuth();
+
   return (
     <div className="flex justify-center items-center flex-col gap-3 p-3 m-auto bg-base-100 rounded-md shadow-md">
       <div className="flex justify-between items-center sm:flex-row flex-col">
@@ -9,13 +12,25 @@ const Reminder = () => {
           <MdWorkOutline size={34} />
         </div>
         <div className="flex grow md:text-lg text-md items-center justify-center">
-          Most recent job offers
+          {auth.role === "Seeker"
+            ? "Most recent job offers"
+            : null}
+          {auth.role === "Recruiter"
+            ? "Add new job offer"
+            : null}
         </div>
       </div>
       <div className="w-full flex items-center justify-center">
-        <Link to="/">
-          <button className="btn">Job offers</button>
-        </Link>
+        {auth.role === "Seeker" ? (
+          <Link to="/">
+            <button className="btn">Job offers</button>
+          </Link>
+        ) : null}
+        {auth.role === "Recruiter" ? (
+          <Link to="/my-offers/create-new-offer">
+            <button className="btn">New offer</button>
+          </Link>
+        ) : null}
       </div>
     </div>
   );

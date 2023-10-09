@@ -1,16 +1,19 @@
+/* eslint-disable react/prop-types */
 import { CiUser } from "react-icons/ci";
 import SignOut from "../Auth/SingOut";
 import { Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
 
-const UserOptions = () => {
-  const auth = useAuth();
+const UserOptions = ({ trueSuccess }) => {
+  const [, { isLoading }] = useRefreshMutation();
 
   const loggedIn = window.localStorage.getItem("isLogged");
 
   return (
     <>
-      {loggedIn === "true" ? (
+      {loggedIn === "true" &&
+      Boolean(trueSuccess) &&
+      !isLoading ? (
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}

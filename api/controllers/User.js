@@ -138,6 +138,7 @@ export const getAllUser = async (req, res, next) => {
 };
 
 export const login = async (req, res) => {
+  const { token } = req.cookies;
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -169,30 +170,39 @@ export const login = async (req, res) => {
       .json({ message: "Password is not correct" });
   }
 
-  jwt.sign(
-    {
-      email: foundUser.email,
-      role: foundUser.role,
-      id: foundUser._id,
-    },
-    secret,
-    {
-      expiresIn: "3d",
-    },
-    async (err, token) => {
-      if (err)
-        return res.status(403), json({ message: "Forbidden" });
+  if (token) {
+    return res.status(422).json({
+      message: "You can have one account signed in at once",
+    });
+  }
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+  if (!token) {
+    jwt.sign(
+      {
+        role: foundUser.role,
+        id: foundUser._id,
+      },
+      secret,
+      {
+        expiresIn: "1d",
+      },
+      async (err, token) => {
+        if (err)
+          return (
+            res.status(403), json({ message: "Forbidden" })
+          );
 
-      res.json({ accessToken: token });
-    }
-  );
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "None",
+          maxAge: 1 * 24 * 60 * 60 * 1000,
+        });
+
+        res.json({ accessToken: token });
+      }
+    );
+  }
 };
 
 export const changePassword = async (req, res) => {
@@ -255,34 +265,34 @@ export const refreshToken = async (req, res) => {
 
   if (!token) return res.sendStatus(204);
 
-  jwt.verify(token, secret, async (err, decoded) => {
-    if (err)
-      return res.status(403).json({ message: "Forbidden" });
+  if (token) {
+    jwt.verify(token, secret, async (err, decoded) => {
+      if (err)
+        return res.status(403).json({ message: "Forbidden" });
 
-    const user = await userModel.findOne({
-      _id: decoded.id,
-    });
+      const user = await userModel.findById(decoded.id);
 
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found" });
-    }
-
-    jwt.sign(
-      {
-        email: user.email,
-        role: user.role,
-        id: user._id,
-      },
-      secret,
-      { expiresIn: "1d" },
-      async (err, token) => {
-        if (err) return res.json({ message: "Forbidden" });
-        res.json({ accessToken: token });
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: "User not found" });
       }
-    );
-  });
+
+      jwt.sign(
+        {
+          role: user.role,
+          id: user._id,
+        },
+        secret,
+        { expiresIn: "1d" },
+        async (err, token) => {
+          if (err) return res.json({ message: "Forbidden" });
+
+          res.json({ accessToken: token });
+        }
+      );
+    });
+  }
 };
 
 export const logout = async (req, res) => {

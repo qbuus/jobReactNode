@@ -1,4 +1,4 @@
-import { Outlet, Navigate, Link } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
 import Loader from "../FeatureComponents/Loader";
@@ -7,10 +7,8 @@ import { useSelector } from "react-redux";
 const RememberLogin = () => {
   const [trueSuccess, setTrueSuccess] = useState(false);
 
-  const [
-    refresh,
-    { isLoading, isSuccess, isUninitialized, isError },
-  ] = useRefreshMutation();
+  const [refresh, { isLoading, isSuccess }] =
+    useRefreshMutation();
 
   const loggedIn = window.localStorage.getItem("isLogged");
 
@@ -41,15 +39,20 @@ const RememberLogin = () => {
 
   if (isLoading) {
     content = <Loader />;
-  } else if (isError && loggedIn === "false" && !token) {
+  } else if (!token && loggedIn === "false") {
     content = (
-      <p className="text-error-content">
-        <Link to="/login">Please login again</Link>.
+      <p className="text-center">
+        <Link
+          to="/login"
+          className="text-center bg-base-200 p-3 rounded-md"
+        >
+          Please login again
+        </Link>
       </p>
     );
-  } else if (isSuccess && trueSuccess && loggedIn === "true") {
+  } else if (token && loggedIn === "true") {
     content = <Outlet />;
-  } else if (token && isUninitialized && loggedIn === "true") {
+  } else if (trueSuccess && isSuccess && loggedIn === "true") {
     content = <Outlet />;
   }
 

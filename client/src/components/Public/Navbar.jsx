@@ -1,15 +1,40 @@
 import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 import ThemeChooser from "../Theme/ThemeChooser";
-import useAuth from "../../hooks/useAuth";
+import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
+import { useEffect, useState } from "react";
 import UserOptions from "../Auth/UserOptions";
 
 const HeaderNav = () => {
+  const [trueSuccess, setTrueSuccess] = useState(false);
+
+  const [refresh, { isLoading, isSuccess }] =
+    useRefreshMutation();
+
+  useEffect(() => {
+    let isDone = false;
+
+    async function CheckLog() {
+      try {
+        await refresh();
+        setTrueSuccess(true);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (!isDone) {
+      CheckLog();
+    }
+
+    return () => {
+      isDone = true;
+    };
+  }, []);
+
   const location = useLocation();
 
   const loggedIn = window.localStorage.getItem("isLogged");
-
-  const auth = useAuth();
 
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
@@ -120,8 +145,10 @@ const HeaderNav = () => {
                 </ul>
               </div>
             </div>
-            {loggedIn === "true" ? null : (
-              <div className="dropdown dropdown-end">
+            {loggedIn === "true" &&
+            isSuccess &&
+            trueSuccess ? null : (
+              <div className="flex flex-col">
                 <Link
                   to={
                     location.pathname === "/login"
@@ -144,7 +171,9 @@ const HeaderNav = () => {
                 </Link>
               </div>
             )}
-            <UserOptions />
+            {isLoading && !trueSuccess ? null : (
+              <UserOptions trueSuccess={trueSuccess} />
+            )}
           </div>
         </div>
       </nav>

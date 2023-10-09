@@ -10,8 +10,12 @@ import { useEffect } from "react";
 import { themeChange } from "theme-change";
 import RememberLogin from "./components/Auth/RememberLogin.jsx";
 import ProfileLayout from "./components/Profile/ProfileLayout.jsx";
-import MyApplications from "./components/Profile/MyApplications.jsx";
 import ResetPassword from "./components/Auth/ResetPassword.jsx";
+import Applications from "./pages/Applications.jsx";
+import Offers from "./pages/Offers.jsx";
+import OffersLayout from "./components/Offers/OffersLayout.jsx";
+import NewOffer from "./components/Offers/NewOffer.jsx";
+import MyOffers from "./components/Offers/MyOffers.jsx";
 
 function App() {
   useEffect(() => {
@@ -43,13 +47,24 @@ function App() {
             <Route element={<RememberLogin />}>
               <Route
                 index
-                path="my-profile"
+                path="/my-profile"
                 element={<Profile />}
               />
               <Route
-                path="my-applications"
-                element={<MyApplications />}
+                path="/my-applications"
+                element={<Applications />}
               />
+              <Route
+                path="/my-offers"
+                element={<OffersLayout />}
+              >
+                <Route index element={<Offers />} />
+                <Route
+                  path="create-new-offer"
+                  element={<NewOffer />}
+                />
+                <Route path="offers" element={<MyOffers />} />
+              </Route>
             </Route>
           </Route>
         </Route>

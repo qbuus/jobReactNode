@@ -47,7 +47,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-
       {/* Look */}
       <div className="grow flex flex-col font-bold bg-gradient-to-br from-base-300 to-primary-focus py-6 md:py-20 px-10 items-center justify-center gap-4 md:gap-8">
         <div className="">
