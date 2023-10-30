@@ -1,8 +1,11 @@
-import { Schema, Model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const workModel = new Schema(
+const workModel = new mongoose.Schema(
   {
-    owner: { type: Schema.Types.ObjectId, ref: "User" },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     company: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     position: {
@@ -54,7 +57,6 @@ const workModel = new Schema(
         "PHP",
         "Rust",
         "C#",
-        "TypeScript",
         "C",
         "SQL",
         "HTML/CSS",
@@ -95,4 +97,6 @@ const workModel = new Schema(
   { timestamps: true }
 );
 
-export default Model("Job", workModel);
+const offerModel = mongoose.model("Offer", workModel);
+
+export default offerModel;

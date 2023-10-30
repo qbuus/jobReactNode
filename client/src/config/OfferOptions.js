@@ -11,7 +11,6 @@ export const skills = [
   "PHP",
   "Rust",
   "C#",
-  "TypeScript",
   "C",
   "SQL",
   "HTML/CSS",

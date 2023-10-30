@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import { useNewOfferMutation } from "../../Redux/Listing/offerApiSlice";
+
 const NumberCheckbox = ({
   setValue,
   value,
@@ -6,7 +8,10 @@ const NumberCheckbox = ({
   max,
   min,
   step,
+  textAfter,
 }) => {
+  const [{ isLoading }] = useNewOfferMutation();
+
   return (
     <div className="flex flex-col gap-1">
       <h3 className="font-semibold">
@@ -23,8 +28,11 @@ const NumberCheckbox = ({
           required
           className="h-10 w-72 rounded placeholder-transparent px-2"
           placeholder="I am willing to pay"
+          disabled={isLoading}
         />
-        <span className="font-semibold text-sm">PLN</span>
+        <span className="font-semibold text-sm">
+          {textAfter}
+        </span>
       </div>
     </div>
   );

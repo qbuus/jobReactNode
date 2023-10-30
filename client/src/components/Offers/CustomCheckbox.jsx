@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
+import { useNewOfferMutation } from "../../Redux/Listing/offerApiSlice";
+
 export default function CustomCheckbox({
   selected,
   onChange,
   itemsNames,
   name,
 }) {
+  const [{ isLoading }] = useNewOfferMutation();
+
   function handleCheckBoxChange(e) {
     const { checked, name } = e.target;
 
@@ -37,7 +41,7 @@ export default function CustomCheckbox({
                   name={`${item}`}
                   onChange={handleCheckBoxChange}
                   className="w-4 h-4 sm:w-6 sm:h-6 rounded focus:ring-primary-focus"
-                  required
+                  disabled={isLoading}
                 />
                 <label
                   htmlFor={`${index} - ${name} - list - item`}

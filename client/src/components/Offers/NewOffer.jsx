@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Loader from "../FeatureComponents/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import CustomCheckbox from "./CustomCheckbox";
 import NumberCheckbox from "./NumberCheckbox";
@@ -9,8 +8,25 @@ import {
   skills as skillToSelect,
   locations as locationsToSelect,
 } from "../../config/OfferOptions.js";
+import { useNewOfferMutation } from "../../Redux/Listing/offerApiSlice";
+import {
+  setErrorMessage,
+  setMessage,
+} from "../../Redux/states/messageSlice.js";
 
 const NewOffer = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const messageSelector = useSelector(
+    (state) => state.messageData.message
+  );
+  const errorMessageSelector = useSelector(
+    (state) => state.messageData.errorMessage
+  );
+
+  const [newOffer, { isSuccess, isLoading }] =
+    useNewOfferMutation();
+
   const [workType, setWorkType] = useState([]);
   const [workingHours, setWorkingHours] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -23,8 +39,53 @@ const NewOffer = () => {
   const [title, setTitle] = useState("");
   const [company, setCompany] = useState("");
 
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        dispatch(setMessage(""));
+        dispatch(setErrorMessage(""));
+        navigate("/my-profile");
+      }, 1000);
+    }
+  }, [isSuccess, navigate, dispatch]);
+
+  async function NewOfferHandler(e) {
+    e.preventDefault();
+
+    try {
+      await newOffer({
+        company,
+        title: title,
+        position: position,
+        description: description,
+        location: location,
+        salary: parseInt(salary),
+        experience: parseInt(experience),
+        skills: skills,
+        workingHours: workingHours,
+        contractType: contractType,
+        workType: workType,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-4">
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={NewOfferHandler}
+    >
+      {errorMessageSelector !== null ? (
+        <div className="text-error font-normal text-sm">
+          {errorMessageSelector}
+        </div>
+      ) : null}
+      {messageSelector !== null ? (
+        <div className="text-success-content font-semibold text-lg">
+          {messageSelector}
+        </div>
+      ) : null}
       <StringCheckbox
         value={company}
         setValue={setCompany}
@@ -57,6 +118,7 @@ const NewOffer = () => {
           required
           onChange={(e) => setDescription(e.target.value)}
           value={description}
+          disabled={isLoading}
         />
       </div>
       <NumberCheckbox
@@ -66,6 +128,7 @@ const NewOffer = () => {
         max={"20"}
         min={"0"}
         step={1}
+        textAfter={"YOE"}
       />
       <NumberCheckbox
         name={"Salary"}
@@ -74,6 +137,7 @@ const NewOffer = () => {
         max={"100000"}
         min={"0"}
         step={1000}
+        textAfter={"PLN / GROSS"}
       />
       <CustomCheckbox
         selected={workType}
@@ -105,7 +169,16 @@ const NewOffer = () => {
         itemsNames={[...locationsToSelect]}
         name={"Location"}
       />
-    </div>
+      <div>
+        <button
+          disabled={isLoading}
+          type="submit"
+          className="btn btn-primary w-full md:w-max"
+        >
+          Create new offer
+        </button>
+      </div>
+    </form>
   );
 };
 

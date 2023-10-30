@@ -60,7 +60,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
             dispatch(apiSliceWithAuth.util.resetApiState());
           }, 1000);
         } catch (error) {
-          console.error(error);
+          console.error("sign out fail");
         }
       },
     }),
@@ -74,9 +74,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
         try {
           const data = await queryFulfilled;
           dispatch(setMessage(data.data.message));
-          console.log(data);
         } catch (error) {
-          console.error(error);
           dispatch(setErrorMessage(error.error.data.message));
         }
       },

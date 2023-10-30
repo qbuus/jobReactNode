@@ -12,6 +12,7 @@ import dbConnection from "./db/dbConnection.js";
 import mongoose from "mongoose";
 import errorHandler from "./middleware/errorHandler.js";
 import userRoutes from "./routes/userRoutes.js";
+import offerRoutes from "./routes/offerRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,6 +32,7 @@ app.use(cors(corsOptions));
 // routes
 app.use("/", rootRouter);
 app.use("/users", userRoutes);
+app.use("/offers", offerRoutes);
 
 // not found api
 app.use("*", (req, res, next) => {
