@@ -12,6 +12,8 @@ router.post(
   offerController.createNewOffer
 );
 
-router.get("/my-offers", verifyJwt, offerController.UserOffers);
+router.get(`/my-offers`, verifyJwt, offerController.UserOffers);
+
+router.patch("/edit", verifyJwt, offerController.editOffer);
 
 export default router;

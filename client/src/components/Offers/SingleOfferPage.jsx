@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import StringCheckbox from "./StringCheckbox";
 import CustomCheckbox from "./CustomCheckbox";
 import NumberCheckbox from "./NumberCheckbox";
-import StringCheckbox from "./StringCheckbox";
 import {
   skills as skillToSelect,
   locations as locationsToSelect,
 } from "../../config/OfferOptions.js";
-import { useNewOfferMutation } from "../../Redux/Listing/offerApiSlice";
 import {
   setErrorMessage,
   setMessage,
 } from "../../Redux/states/messageSlice.js";
+import { useEditOfferMutation } from "../../Redux/Listing/offerApiSlice";
 
-const NewOffer = () => {
+const SingleOfferPage = () => {
+  const params = useParams();
+  const offerId = params.id;
+
+  const { state } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const messageSelector = useSelector(
@@ -24,57 +32,68 @@ const NewOffer = () => {
     (state) => state.messageData.errorMessage
   );
 
-  const [newOffer, { isSuccess, isLoading }] =
-    useNewOfferMutation();
+  const [editOffer, { isLoading, isSuccess }] =
+    useEditOfferMutation();
 
-  const [workType, setWorkType] = useState([]);
-  const [workingHours, setWorkingHours] = useState([]);
-  const [skills, setSkills] = useState([]);
-  const [contractType, setContractType] = useState([]);
-  const [location, setLocation] = useState([]);
-  const [experience, setExperience] = useState(0);
-  const [salary, setSalary] = useState(0);
-  const [description, setDescription] = useState("");
-  const [position, setPosition] = useState("");
-  const [title, setTitle] = useState("");
-  const [company, setCompany] = useState("");
+  const [workType, setWorkType] = useState(state.workType);
+  const [workingHours, setWorkingHours] = useState(
+    state.workingHours
+  );
+  const [skills, setSkills] = useState(state.skills);
+  const [contractType, setContractType] = useState(
+    state.contractType
+  );
+  const [location, setLocation] = useState(state.location);
+  const [experience, setExperience] = useState(
+    state.experience
+  );
+  const [salary, setSalary] = useState(state.salary);
+  const [description, setDescription] = useState(
+    state.description
+  );
+  const [position, setPosition] = useState(state.position);
+  const [title, setTitle] = useState(state.title);
+  const [company, setCompany] = useState(state.company);
 
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
         dispatch(setMessage(""));
         dispatch(setErrorMessage(""));
-        navigate("/my-profile");
+        navigate("/");
       }, 1000);
     }
   }, [isSuccess, navigate, dispatch]);
 
-  async function NewOfferHandler(e) {
+  const offerData = {
+    id: offerId,
+    company: company,
+    title: title,
+    position: position,
+    description: description,
+    location: location,
+    salary: parseInt(salary),
+    experience: parseInt(experience),
+    skills: skills,
+    workingHours: workingHours,
+    contractType: contractType,
+    workType: workType,
+  };
+
+  const EditOfferHandler = async (e) => {
     e.preventDefault();
 
     try {
-      await newOffer({
-        company: company,
-        title: title,
-        position: position,
-        description: description,
-        location: location,
-        salary: parseInt(salary),
-        experience: parseInt(experience),
-        skills: skills,
-        workingHours: workingHours,
-        contractType: contractType,
-        workType: workType,
-      });
+      await editOffer(offerData);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={NewOfferHandler}
+      onSubmit={EditOfferHandler}
     >
       {errorMessageSelector !== null ? (
         <div className="text-error font-normal text-sm">
@@ -175,11 +194,11 @@ const NewOffer = () => {
           type="submit"
           className="btn btn-primary w-full md:w-max"
         >
-          Create new offer
+          Edit this offer
         </button>
       </div>
     </form>
   );
 };
 
-export default NewOffer;
+export default SingleOfferPage;

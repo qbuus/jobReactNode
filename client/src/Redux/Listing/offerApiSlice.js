@@ -21,10 +21,25 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
         }
       },
     }),
-    myOffers: builder.mutation({
-      query: () => ({
-        url: "/offers/my-offers",
+    myOffers: builder.query({
+      query: (pageNumber) => ({
+        url: `/offers/my-offers?pageNumber=${pageNumber}`,
         method: "GET",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data.data.message));
+        } catch (error) {
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
+    }),
+    editOffer: builder.mutation({
+      query: (offerData) => ({
+        url: "/offers/edit",
+        method: "PATCH",
+        body: { ...offerData },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
@@ -38,5 +53,8 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
   }),
 });
 
-export const { useNewOfferMutation, useMyOffersMutation } =
-  OfferApiSlice;
+export const {
+  useNewOfferMutation,
+  useMyOffersQuery,
+  useEditOfferMutation,
+} = OfferApiSlice;

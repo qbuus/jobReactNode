@@ -16,6 +16,7 @@ import Offers from "./pages/Offers.jsx";
 import OffersLayout from "./components/Offers/OffersLayout.jsx";
 import NewOffer from "./components/Offers/NewOffer.jsx";
 import MyOffers from "./components/Offers/MyOffers.jsx";
+import SingleOfferPage from "./components/Offers/SingleOfferPage.jsx";
 
 function App() {
   useEffect(() => {
@@ -64,6 +65,10 @@ function App() {
                   element={<NewOffer />}
                 />
                 <Route path="offers" element={<MyOffers />} />
+                <Route
+                  path="offers/:id"
+                  element={<SingleOfferPage />}
+                />
               </Route>
             </Route>
           </Route>
