@@ -44,7 +44,7 @@ const NewOffer = () => {
       setTimeout(() => {
         dispatch(setMessage(""));
         dispatch(setErrorMessage(""));
-        navigate("/my-profile");
+        navigate("/");
       }, 1000);
     }
   }, [isSuccess, navigate, dispatch]);

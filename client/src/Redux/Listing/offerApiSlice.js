@@ -50,6 +50,35 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
         }
       },
     }),
+    deleteOffer: builder.mutation({
+      query: (id) => ({
+        url: "/offers/delete",
+        method: "DELETE",
+        body: { ...id },
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data.data.message));
+        } catch (error) {
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
+    }),
+    latestOffer: builder.mutation({
+      query: () => ({
+        url: "/offers/latest",
+        method: "GET",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data.data.message));
+        } catch (error) {
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
+    }),
   }),
 });
 
@@ -57,4 +86,6 @@ export const {
   useNewOfferMutation,
   useMyOffersQuery,
   useEditOfferMutation,
+  useDeleteOfferMutation,
+  useLatestOfferMutation,
 } = OfferApiSlice;

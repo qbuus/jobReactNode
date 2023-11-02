@@ -263,7 +263,13 @@ export const changePassword = async (req, res) => {
 export const refreshToken = async (req, res) => {
   const { token } = req.cookies;
 
-  if (!token) return res.sendStatus(204);
+  if (!token) {
+    return res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
+  }
 
   if (token) {
     jwt.verify(token, secret, async (err, decoded) => {

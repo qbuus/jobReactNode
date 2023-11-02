@@ -91,9 +91,6 @@ export const UserOffers = async (req, res) => {
   const { token } = req.cookies;
   const pageSize = 10;
   const page = Number(req.query.pageNumber);
-  const count = await userModel
-    .find({})
-    .estimatedDocumentCount();
 
   if (!token)
     return res.status(401).json({ message: "Unauthorized" });
@@ -111,6 +108,10 @@ export const UserOffers = async (req, res) => {
           "This account does not have permission to view this",
       });
     }
+
+    const count = await offerModel
+      .find({ owner: decoded.id })
+      .estimatedDocumentCount();
 
     const userOffers = await offerModel
       .find({
@@ -220,5 +221,67 @@ export const editOffer = (req, res) => {
     return res.status(200).json({
       message: `Offer ${id} has been edited successfully`,
     });
+  });
+};
+
+export const deleteOffer = (req, res) => {
+  const { token } = req.cookies;
+  const { id } = req.body;
+
+  if (!token)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  jwt.verify(token, secret, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Forbidden" });
+
+    const foundUser = await userModel.findById(decoded.id);
+    const foundOffer = await offerModel.findById(id);
+
+    if (foundUser.role !== "Recruiter") {
+      return res.status(403).json({
+        message:
+          "This account does not have permission to do this action",
+      });
+    }
+
+    if (
+      foundOffer.owner.toString() !== foundUser._id.toString()
+    ) {
+      return res.status(401).json({
+        message: "This user is not an owner of this offer",
+      });
+    }
+
+    await offerModel.deleteOne(foundOffer);
+
+    return res.status(200).json({
+      message: `Offer ${foundOffer._id} deleted`,
+      status: 200,
+    });
+  });
+};
+
+export const latestOffers = async (req, res) => {
+  const pageSize = 5;
+
+  const LatestOffers = await offerModel
+    .find({})
+    .sort({ createdAt: -1 })
+    .select("-_id -owner -applicants -savedBy")
+    .limit(pageSize);
+
+  if (!LatestOffers) {
+    return res.status(404).json({
+      message: "Latest offers not found",
+      status: 404,
+    });
+  }
+
+  return res.status(200).json({
+    message: "Top 5 latest offers",
+    status: 200,
+    data: LatestOffers,
+    count: pageSize,
   });
 };

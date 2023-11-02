@@ -16,4 +16,12 @@ router.get(`/my-offers`, verifyJwt, offerController.UserOffers);
 
 router.patch("/edit", verifyJwt, offerController.editOffer);
 
+router.delete(
+  "/delete",
+  verifyJwt,
+  offerController.deleteOffer
+);
+
+router.get("/latest", offerController.latestOffers);
+
 export default router;

@@ -171,9 +171,9 @@ const HeaderNav = () => {
                 </Link>
               </div>
             )}
-            {isLoading && !trueSuccess ? null : (
+            {trueSuccess && isSuccess && !isLoading ? (
               <UserOptions trueSuccess={trueSuccess} />
-            )}
+            ) : null}
           </div>
         </div>
       </nav>

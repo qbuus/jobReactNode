@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMyOffersQuery } from "../../Redux/Listing/offerApiSlice";
 import Loader from "../FeatureComponents/Loader";
 import MyOffersTable from "./MyOffersTable";
 
 const MyOffers = () => {
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, isLoading, isError, isFetching, isSuccess } =
+  const { data, isLoading, isFetching, isSuccess } =
     useMyOffersQuery(pageNumber);
 
   function NextPageHandler() {
