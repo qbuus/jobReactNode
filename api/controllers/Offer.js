@@ -121,9 +121,10 @@ export const UserOffers = async (req, res) => {
       .skip(pageSize * (page - 1))
       .limit(pageSize);
 
-    if (!userOffers) {
+    if (userOffers.length === 0) {
       return res.status(200).json({
         message: "You have not created any offers yet",
+        count: 0,
       });
     }
 
@@ -283,5 +284,61 @@ export const latestOffers = async (req, res) => {
     status: 200,
     data: LatestOffers,
     count: pageSize,
+  });
+};
+
+export const highlightedOffers = async (req, res) => {
+  const pageSize = 5;
+
+  const HighlightedOffers = await offerModel
+    .find({})
+    .where("experience")
+    .gt(4)
+    .sort({ createdAt: -1 })
+    .select("-_id -owner -applicants -savedBy")
+    .limit(pageSize);
+
+  if (!HighlightedOffers) {
+    return res.status(404).json({
+      message: "HighlightedOffers not found",
+      status: 404,
+    });
+  }
+
+  return res.status(200).json({
+    message: "Top 5 highlighted offers",
+    status: 200,
+    data: HighlightedOffers,
+    count: pageSize,
+  });
+};
+
+export const AllOffers = async (req, res) => {
+  const pageSize = 10;
+  const page = parseInt(req.query.pageNumber) || 1;
+  const skill = req.query.skill
+    ? { skills: req.query.skill.toString() }
+    : {};
+
+  const allOffers = await offerModel
+    .find({ ...skill })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+
+  const count = allOffers.length;
+
+  if (allOffers.length === 0) {
+    return res.status(200).json({
+      message: "No job openings found",
+      count: 0,
+    });
+  }
+
+  return res.status(200).json({
+    allOffers,
+    message: `${allOffers.length} Offers found`,
+    pages: Math.ceil(count / pageSize),
+    count: count,
+    currentPage: page,
   });
 };

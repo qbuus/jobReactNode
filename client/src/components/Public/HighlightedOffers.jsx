@@ -1,33 +1,32 @@
-/* eslint-disable react/prop-types */
-import { AiOutlineStar } from "react-icons/ai";
-import CustomOfferBox from "./CustomOfferBox";
-import { useLatestOfferMutation } from "../../Redux/Listing/offerApiSlice";
 import { useEffect } from "react";
+import { useHighlightedOfferMutation } from "../../Redux/Listing/offerApiSlice";
+import CustomOfferBox from "./CustomOfferBox";
+import { FaChartLine } from "react-icons/fa";
 
-const LatestOffers = () => {
-  const [latestOffer, { isLoading, data }] =
-    useLatestOfferMutation();
+const HighlightedOffers = () => {
+  const [highlightedOffer, { isLoading, data }] =
+    useHighlightedOfferMutation();
 
   useEffect(() => {
-    loadLatest();
+    loadHighlightedOffers();
   }, []);
 
-  async function loadLatest() {
-    await latestOffer();
+  async function loadHighlightedOffers() {
+    await highlightedOffer();
   }
 
   return (
     <div className="flex flex-col gap-4 w-full sm:pl-5 sm:pr-5">
       <div className="flex gap-2 md:m-0 ml-3">
         <div className="flex items-center">
-          <AiOutlineStar
+          <FaChartLine
             size={35}
             className="text-base-content"
           />
         </div>
         <div className="flex items-center">
           <h2 className="font-semibold text-2xl">
-            Latest offers
+            Highlighted offers
           </h2>
         </div>
       </div>
@@ -41,7 +40,7 @@ const LatestOffers = () => {
           ))
         ) : (
           <p className="text-xl text-error-content">
-            No latest offers found
+            No highlighted offers found
           </p>
         )}
       </div>
@@ -49,4 +48,4 @@ const LatestOffers = () => {
   );
 };
 
-export default LatestOffers;
+export default HighlightedOffers;

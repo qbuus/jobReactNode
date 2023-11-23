@@ -17,6 +17,7 @@ import OffersLayout from "./components/Offers/OffersLayout.jsx";
 import NewOffer from "./components/Offers/NewOffer.jsx";
 import MyOffers from "./components/Offers/MyOffers.jsx";
 import SingleOfferPage from "./components/Offers/SingleOfferPage.jsx";
+import OfferFilter from "./pages/OfferFilter.jsx";
 
 function App() {
   useEffect(() => {
@@ -42,6 +43,10 @@ function App() {
 
           <Route element={<PublicLayout />}>
             <Route index element={<PublicMain />} />
+            <Route
+              path="/all-offers"
+              element={<OfferFilter />}
+            />
           </Route>
 
           <Route element={<ProfileLayout />}>

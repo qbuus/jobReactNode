@@ -79,6 +79,25 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
         }
       },
     }),
+    highlightedOffer: builder.mutation({
+      query: () => ({
+        url: "/offers/highlighted",
+        method: "GET",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(setMessage(data.data.message));
+        } catch (error) {
+          dispatch(setErrorMessage(error.error.data.message));
+        }
+      },
+    }),
+    allOffer: builder.query({
+      query: ({ pageNumber, skill }) => ({
+        url: `/offers/alloffers?pageNumber=${pageNumber}&skill=${skill}`,
+      }),
+    }),
   }),
 });
 
@@ -88,4 +107,6 @@ export const {
   useEditOfferMutation,
   useDeleteOfferMutation,
   useLatestOfferMutation,
+  useHighlightedOfferMutation,
+  useAllOfferQuery,
 } = OfferApiSlice;
