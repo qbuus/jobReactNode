@@ -5,6 +5,7 @@ A Fullstack app for people that look for job. It is built in React.js and based 
 ## Table of contents
 * [Stack](#stack)
 * [Features](#features)
+* [Information](#information)
 
 ## Stack
 Backend:
