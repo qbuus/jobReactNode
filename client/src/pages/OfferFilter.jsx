@@ -25,8 +25,6 @@ const OfferFilter = () => {
 
   if (isFetching && !currentData) return <Loader />;
 
-  console.log(currentData);
-
   return (
     <div className="flex flex-col gap-10 mt-8 mb-8 w-full max-w-6xl items-center m-auto">
       <FilterMenu />

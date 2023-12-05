@@ -25,5 +25,6 @@ router.delete(
 router.get("/latest", offerController.latestOffers);
 router.get("/highlighted", offerController.highlightedOffers);
 router.get("/alloffers", offerController.AllOffers);
+router.get("/offer/:id", offerController.SingleOffer);
 
 export default router;

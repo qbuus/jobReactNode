@@ -4,6 +4,7 @@ import workModel from "../models/Work.js";
 import userModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import offerModel from "../models/Work.js";
+import mongoose from "mongoose";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -269,7 +270,7 @@ export const latestOffers = async (req, res) => {
   const LatestOffers = await offerModel
     .find({})
     .sort({ createdAt: -1 })
-    .select("-_id -owner -applicants -savedBy")
+    .select("-owner -applicants -savedBy")
     .limit(pageSize);
 
   if (!LatestOffers) {
@@ -295,7 +296,7 @@ export const highlightedOffers = async (req, res) => {
     .where("experience")
     .gt(4)
     .sort({ createdAt: -1 })
-    .select("-_id -owner -applicants -savedBy")
+    .select("-owner -applicants -savedBy")
     .limit(pageSize);
 
   if (!HighlightedOffers) {
@@ -341,5 +342,31 @@ export const AllOffers = async (req, res) => {
     pages: Math.ceil(count / pageSize),
     count: count,
     currentPage: page,
+  });
+};
+
+export const SingleOffer = async (req, res) => {
+  const { id } = req.params;
+
+  const checkIfValid = mongoose.Types.ObjectId.isValid(id);
+
+  if (!checkIfValid)
+    return res
+      .status(404)
+      .json({ message: "Id is not valid", status: 404 });
+
+  const SingleOffer = await offerModel.findById(id).lean();
+
+  if (!SingleOffer) {
+    return res.status(404).json({
+      message: "Offer not found",
+      status: 404,
+    });
+  }
+
+  return res.status(200).json({
+    status: 200,
+    singleOffer: SingleOffer,
+    message: `Offer ${SingleOffer._id} Found`,
   });
 };

@@ -17,7 +17,7 @@ const AllOffersData = ({ data }) => {
           </div>
           <div className="flex items-center">
             <h2 className="font-semibold text-2xl">
-              Highlighted offers
+              Filtered Offers
             </h2>
           </div>
         </div>
