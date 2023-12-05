@@ -103,6 +103,9 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
         url: `/offers/offer/${id}`,
       }),
     }),
+    relatedOffers: builder.query({
+      query: (id) => ({ url: `/offers/related/${id}` }),
+    }),
   }),
 });
 
@@ -115,4 +118,5 @@ export const {
   useHighlightedOfferMutation,
   useAllOfferQuery,
   useSingleOfferQuery,
+  useRelatedOffersQuery,
 } = OfferApiSlice;

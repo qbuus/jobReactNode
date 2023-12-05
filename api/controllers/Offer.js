@@ -370,3 +370,42 @@ export const SingleOffer = async (req, res) => {
     message: `Offer ${SingleOffer._id} Found`,
   });
 };
+
+export const YouMightAlsoLike = async (req, res) => {
+  const { id } = req.params;
+
+  const checkIfValid = mongoose.Types.ObjectId.isValid(id);
+
+  if (!checkIfValid)
+    return res
+      .status(404)
+      .json({ message: "Id is not valid", status: 404 });
+
+  const watchedOffer = await offerModel.findById(id).lean();
+
+  const relatedContent = await offerModel
+    .find({
+      salary: {
+        $gte: watchedOffer.salary - 8000,
+        $lte: watchedOffer.salary + 8000,
+      },
+      _id: { $ne: watchedOffer._id },
+    })
+    .select(
+      "-title -description -location -skills -savedBy -workingHours -contractType -workType -createdAt -updatedAt"
+    )
+    .limit(6)
+    .lean();
+
+  if (!relatedContent) {
+    return res.status(404).json({
+      message: "No related offers found",
+      status: 404,
+    });
+  }
+
+  return res.status(200).json({
+    message: "You might also like",
+    relatedOffers: relatedContent,
+  });
+};
