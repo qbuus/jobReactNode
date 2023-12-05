@@ -13,7 +13,7 @@ const Reminder = () => {
         </div>
         <div className="flex grow md:text-lg text-md items-center justify-center">
           {auth.role === "Seeker"
-            ? "Most recent job offers"
+            ? "Look for more job opening"
             : null}
           {auth.role === "Recruiter"
             ? "Add new job offer"
@@ -22,7 +22,7 @@ const Reminder = () => {
       </div>
       <div className="w-full flex items-center justify-center">
         {auth.role === "Seeker" ? (
-          <Link to="/">
+          <Link to="/all-offers">
             <button className="btn">Job offers</button>
           </Link>
         ) : null}

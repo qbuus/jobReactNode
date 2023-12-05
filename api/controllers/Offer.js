@@ -331,6 +331,7 @@ export const AllOffers = async (req, res) => {
     return res.status(200).json({
       message: "No job openings found",
       count: 0,
+      pages: 0,
     });
   }
 
