@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useSingleOfferQuery } from "../../Redux/Listing/offerApiSlice";
 import Loader from "../FeatureComponents/Loader";
 import dateFormat from "../FeatureComponents/dateFormat";
@@ -30,10 +30,7 @@ const SingleOffer = () => {
           <div className="flex flex-col h-min bg-base-100 max-w-4xl gap-6 md:mx-auto px-1 py-3 md:px-3 w-full">
             <div className="flex flex-col sm:flex-row sm:justify-center items-center gap-6 sm:gap-12">
               <button className="btn btn-primary sm:btn-lg px-12 sm:px-6">
-                Apply
-              </button>
-              <button className="btn btn-secondary sm:btn-lg px-12 sm:px-6">
-                Save
+                <Link to={`/apply/${offerId}`}>Apply</Link>
               </button>
             </div>
             <Wrapper>

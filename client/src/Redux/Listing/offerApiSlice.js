@@ -21,6 +21,25 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
         }
       },
     }),
+    jobApplication: builder.mutation({
+      query: (formData) => ({
+        url: "/offers/apply",
+        method: "POST",
+        body: formData,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          if (data.data.message) {
+            dispatch(setMessage(data.data.message));
+          }
+        } catch (error) {
+          if (error.error.data.message) {
+            dispatch(setErrorMessage(error.error.data.message));
+          }
+        }
+      },
+    }),
     myOffers: builder.query({
       query: (pageNumber) => ({
         url: `/offers/my-offers?pageNumber=${pageNumber}`,
@@ -119,4 +138,5 @@ export const {
   useAllOfferQuery,
   useSingleOfferQuery,
   useRelatedOffersQuery,
+  useJobApplicationMutation,
 } = OfferApiSlice;

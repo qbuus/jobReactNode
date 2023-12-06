@@ -5,6 +5,10 @@ import userModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import offerModel from "../models/Work.js";
 import mongoose from "mongoose";
+import {
+  confirmationEmail,
+  emailToOwner,
+} from "../utils/sendEmail.js";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -408,4 +412,98 @@ export const YouMightAlsoLike = async (req, res) => {
     message: "You might also like",
     relatedOffers: relatedContent,
   });
+};
+
+export const jobApplication = async (req, res) => {
+  const receiver = req.body.email;
+  const owner = req.body.owner;
+  const emailRegexp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  const checkIfValid = mongoose.Types.ObjectId.isValid(
+    parseInt(owner)
+  );
+
+  if (!checkIfValid)
+    return res.status(404).json({ message: "Id is not valid" });
+
+  if (!receiver || !req.file.buffer) {
+    return res
+      .status(400)
+      .json({ message: "All these fields are required" });
+  }
+
+  if (!emailRegexp.test(receiver)) {
+    return res
+      .status(422)
+      .json({ message: "email is not valid" });
+  }
+
+  if (req.fileValidationError) {
+    return res
+      .status(422)
+      .json({ message: "File is not valid" });
+  }
+
+  const OfferToApply = await offerModel.findOne({
+    owner: owner,
+  });
+  const OfferOwner = await userModel.findById(
+    OfferToApply.owner
+  );
+
+  if (!OfferOwner) {
+    return res
+      .status(404)
+      .json({ message: "Owner of this offer not found" });
+  }
+
+  if (!OfferToApply) {
+    return res.status(404).json({ message: "Offer not found" });
+  }
+
+  const pdfResume = req.file.buffer;
+
+  const SeekerData = {
+    file: pdfResume,
+    company: OfferToApply.company,
+    title: OfferToApply.title,
+  };
+
+  const OwnerData = {
+    file: pdfResume,
+    from: receiver,
+    title: OfferToApply.title,
+    company: OfferToApply.company,
+  };
+
+  const hasAlreadyApplied =
+    OfferToApply.savedBy.includes(receiver);
+
+  if (!hasAlreadyApplied) {
+    await OfferToApply.updateOne({
+      $addToSet: { savedBy: receiver },
+    });
+  } else {
+    return res.status(400).json({
+      message: "You already applied for this role",
+    });
+  }
+
+  // can not set headers due to sending more that 1 resp
+  const promiseOne = confirmationEmail(receiver, SeekerData);
+  const promiseTwo = emailToOwner(OfferOwner.email, OwnerData);
+
+  Promise.all([promiseOne, promiseTwo])
+    .then(() => {
+      return res.status(200).json({
+        message: "Your application has been sent successfully",
+      });
+    })
+    .catch(() => {
+      return res.status(500).json({
+        message:
+          "There was a problem sending you application. Please try again later",
+      });
+    });
 };

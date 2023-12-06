@@ -75,7 +75,7 @@ const workModel = new mongoose.Schema(
         "Ruby",
       ],
     },
-    savedBy: [{ type: Schema.Types.ObjectId, required: false }],
+    savedBy: [{ type: Schema.Types.String, required: false }],
     workingHours: {
       type: [String],
       required: true,
