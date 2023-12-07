@@ -26,8 +26,6 @@ const Apply = () => {
     (state) => state.messageData.errorMessage
   );
 
-  console.log(status);
-
   const [file, setFile] = useState(null);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -39,8 +37,10 @@ const Apply = () => {
   const handleEmailChange = (e) => setEmail(e.target.value);
 
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
     accept: { "application/pdf": [".pdf"] },
+    onDrop,
+    maxFiles: 1,
+    maxSize: 1 * 1024 * 1024,
   });
 
   const [jobApplication, { isError, isSuccess }] =
@@ -102,7 +102,9 @@ const Apply = () => {
     );
   } else if (status === "fulfilled") {
     content = (
-      <SiteWrapper>
+      <div className="flex flex-col gap-6 mx-auto my-3 max-w-3xl w-full bg-base-100 p-1">
+        {isLoading && status === "pending" && <Loader />}
+        {isFetching && !currentData && <Loader />}
         <div className="flex mx-auto font-bold text-2xl">
           <h3>Apply to this offer</h3>
         </div>
@@ -112,11 +114,13 @@ const Apply = () => {
         >
           <div className="flex flex-col gap-1">
             <div
-              {...getRootProps()}
-              className="flex bg-base-300 w-full max-w-max mx-auto p-2 rounded-md"
+              {...getRootProps({
+                className:
+                  "flex bg-base-300 w-full max-w-max mx-auto p-2 rounded-md cursor-pointer",
+              })}
             >
               <input {...getInputProps()} />
-              <p className="font-semibold text-base-content">
+              <p className="font-semibold text-md">
                 Drag & drop a PDF file here, or click to select
                 one
               </p>
@@ -143,15 +147,6 @@ const Apply = () => {
               className="input input-bordered max-w-lg w-full"
             />
           </div>
-          <div className="flex mx-auto">
-            <button
-              type="submit"
-              disabled={submitted}
-              className="btn btn-primary btn-lg"
-            >
-              Apply
-            </button>
-          </div>
           <div className="flex gap-2 mx-auto">
             <input
               required
@@ -162,27 +157,26 @@ const Apply = () => {
               Consent for future recruitment process
             </label>
           </div>
-          {errorMessageSelector !== null ? (
-            <div className="text-error font-semibold text-md">
-              {errorMessageSelector}
-            </div>
-          ) : null}
-          {messageSelector !== null ? (
-            <div className="text-success-content font-bold text-lg">
-              {messageSelector}
-            </div>
-          ) : null}
+          <div className="flex mx-auto">
+            <button
+              type="submit"
+              disabled={submitted}
+              className="btn btn-primary btn-lg"
+            >
+              Apply
+            </button>
+          </div>
         </form>
-      </SiteWrapper>
-    );
-  }
-
-  function SiteWrapper({ children }) {
-    return (
-      <div className="flex flex-col gap-6 mx-auto my-3 max-w-3xl w-full bg-base-100 p-1">
-        {isLoading && status === "pending" && <Loader />}
-        {isFetching && !currentData && <Loader />}
-        {children}
+        {errorMessageSelector !== null ? (
+          <div className="text-error font-semibold text-md">
+            {errorMessageSelector}
+          </div>
+        ) : null}
+        {messageSelector !== null ? (
+          <div className="text-success-content font-bold text-lg">
+            {messageSelector}
+          </div>
+        ) : null}
       </div>
     );
   }
