@@ -125,11 +125,18 @@ export const OfferApiSlice = apiSliceWithAuth.injectEndpoints({
     relatedOffers: builder.query({
       query: (id) => ({ url: `/offers/related/${id}` }),
     }),
+    allApplied: builder.mutation({
+      query: () => ({
+        url: "/offers/allApplied",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
   useNewOfferMutation,
+  useAllAppliedMutation,
   useMyOffersQuery,
   useEditOfferMutation,
   useDeleteOfferMutation,

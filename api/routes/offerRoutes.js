@@ -33,5 +33,10 @@ router.post(
   upload.single("file"),
   offerController.jobApplication
 );
+router.get(
+  "/allApplied",
+  verifyJwt,
+  offerController.findAllWhereUserApplied
+);
 
 export default router;

@@ -507,3 +507,30 @@ export const jobApplication = async (req, res) => {
       });
     });
 };
+
+export const findAllWhereUserApplied = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  jwt.verify(token, secret, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const foundUser = await userModel.findById(decoded.id);
+
+    const allApplied = await offerModel.find({
+      savedBy: foundUser.email,
+    });
+
+    if (!allApplied) {
+      return res.status(404).json({
+        message: "You have not applied for any job opening yet",
+      });
+    }
+
+    return res.status(200).json({ offersApplied: allApplied });
+  });
+};
