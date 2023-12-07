@@ -446,7 +446,7 @@ export const jobApplication = async (req, res) => {
   }
 
   const OfferToApply = await offerModel.findOne({
-    owner: owner,
+    _id: owner,
   });
   const OfferOwner = await userModel.findById(
     OfferToApply.owner
