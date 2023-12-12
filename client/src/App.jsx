@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import PublicLayout from "./components/Public/PublicLayout.jsx";
 import Login from "./components/Auth/Login";
 import PublicMain from "./components/Public/PublicMain";
@@ -20,6 +20,7 @@ import PrivateSingleOfferPage from "./components/Offers/SingleOfferPage.jsx";
 import OfferFilter from "./pages/OfferFilter.jsx";
 import SingleOffer from "./components/Public/SingleOffer.jsx";
 import Apply from "./pages/Apply.jsx";
+import NotFound from "./pages/404.jsx";
 
 function App() {
   useEffect(() => {
@@ -85,6 +86,13 @@ function App() {
             </Route>
           </Route>
         </Route>
+
+        {/* Fallback */}
+        <Route path="404" element={<NotFound />} />
+        <Route
+          path="*"
+          element={<Navigate replace to="/404" />}
+        />
       </Routes>
     </>
   );
