@@ -531,6 +531,6 @@ export const findAllWhereUserApplied = async (req, res) => {
       });
     }
 
-    return res.status(200).json({ offersApplied: allApplied });
+    return res.status(200).json(allApplied);
   });
 };

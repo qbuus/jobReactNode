@@ -5,8 +5,6 @@ import dateFormat from "../FeatureComponents/dateFormat";
 const MyOffersTable = ({ myOffersData }) => {
   const navigate = useNavigate();
 
-  console.log(myOffersData);
-
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs sm:table-md md:table-lg">
