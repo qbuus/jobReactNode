@@ -37,9 +37,7 @@ const RememberLogin = () => {
 
   let content;
 
-  if (isLoading) {
-    content = <Loader />;
-  } else if (!token && loggedIn === "false") {
+  if (!token && loggedIn === "false") {
     content = (
       <p className="text-center">
         <Link
@@ -50,6 +48,8 @@ const RememberLogin = () => {
         </Link>
       </p>
     );
+  } else if (isLoading) {
+    content = <Loader />;
   } else if (token && loggedIn === "true") {
     content = <Outlet />;
   } else if (trueSuccess && isSuccess && loggedIn === "true") {
