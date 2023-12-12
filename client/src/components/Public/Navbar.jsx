@@ -1,40 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
 import { GiNetworkBars } from "react-icons/gi";
 import ThemeChooser from "../Theme/ThemeChooser";
-import { useRefreshMutation } from "../../Redux/Auth/authApiSlice";
-import { useEffect, useState } from "react";
 import UserOptions from "../Auth/UserOptions";
+import { useSelector } from "react-redux";
 
 const HeaderNav = () => {
-  const [trueSuccess, setTrueSuccess] = useState(false);
-
-  const [refresh, { isLoading, isSuccess }] =
-    useRefreshMutation();
-
-  useEffect(() => {
-    let isDone = false;
-
-    async function CheckLog() {
-      try {
-        await refresh();
-        setTrueSuccess(true);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    if (!isDone) {
-      CheckLog();
-    }
-
-    return () => {
-      isDone = true;
-    };
-  }, []);
+  const token = useSelector((state) => state.userData.token);
 
   const location = useLocation();
 
   const loggedIn = window.localStorage.getItem("isLogged");
+
+  const isToken = Boolean(token);
 
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-60 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-xl">
@@ -145,9 +122,7 @@ const HeaderNav = () => {
                 </ul>
               </div>
             </div>
-            {loggedIn === "true" &&
-            isSuccess &&
-            trueSuccess ? null : (
+            {loggedIn === "true" && isToken ? null : (
               <div className="flex flex-col">
                 <Link
                   to={
@@ -171,8 +146,8 @@ const HeaderNav = () => {
                 </Link>
               </div>
             )}
-            {trueSuccess && isSuccess && !isLoading ? (
-              <UserOptions trueSuccess={trueSuccess} />
+            {isToken ? (
+              <UserOptions trueSuccess={isToken} />
             ) : null}
           </div>
         </div>

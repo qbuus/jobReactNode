@@ -280,7 +280,7 @@ export const refreshToken = async (req, res) => {
 
       if (!user) {
         return res
-          .status(404)
+          .status(200)
           .json({ message: "User not found" });
       }
 
@@ -305,7 +305,7 @@ export const logout = async (req, res) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.sendStatus(204);
+    return res.status(204);
   }
 
   res.clearCookie("token", {

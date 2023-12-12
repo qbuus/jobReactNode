@@ -42,6 +42,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
             window.localStorage.setItem("isLogged", false);
           }
         } catch (error) {
+          window.localStorage.setItem("isLogged", false);
           console.error(error);
         }
       },
@@ -49,7 +50,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
     signOut: builder.mutation({
       query: () => ({
         url: "/users/logout",
-        method: "POST",
+        method: "GET",
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
@@ -58,7 +59,7 @@ export const authApiSlice = apiSliceWithAuth.injectEndpoints({
           dispatch(signOut());
           setTimeout(() => {
             dispatch(apiSliceWithAuth.util.resetApiState());
-          }, 1000);
+          }, 0);
         } catch (error) {
           console.error("sign out fail");
         }
